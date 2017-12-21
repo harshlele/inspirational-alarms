@@ -2,6 +2,7 @@ package com.example.h.alarmclock;
 
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
@@ -21,15 +21,22 @@ import com.h6ah4i.android.widget.advrecyclerview.swipeable.annotation.SwipeableI
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.annotation.SwipeableItemResults;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractSwipeableItemViewHolder;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * Created by h on 12/20/17.
+ * Main Activity
  */
 
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_layout);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
 
         // Setup swiping feature and RecyclerView
         RecyclerViewSwipeManager swipeMgr = new RecyclerViewSwipeManager();
@@ -48,6 +55,27 @@ public class MainActivity extends AppCompatActivity {
 
         swipeMgr.attachRecyclerView(recyclerView);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public static class DeleteAlarmEvent { /* Additional fields if needed */ }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DeleteAlarmEvent event) {
+        Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
+    }
+
 
     static class MyItem {
         public final long id;
@@ -61,12 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
     static class MyViewHolder extends AbstractSwipeableItemViewHolder {
         FrameLayout containerView;
-        TextView textView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             containerView = itemView.findViewById(R.id.container);
-            textView = itemView.findViewById(android.R.id.text1);
         }
 
         @Override
@@ -103,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            MyItem item = mItems.get(position);
-            holder.textView.setText(item.text);
         }
 
         @Override
@@ -148,8 +172,11 @@ public class MainActivity extends AppCompatActivity {
             protected void onPerformAction() {
                 adapter.mItems.remove(position);
                 adapter.notifyItemRemoved(position);
+                EventBus.getDefault().post(new DeleteAlarmEvent());
             }
         }
     }
+
+
 
 }
