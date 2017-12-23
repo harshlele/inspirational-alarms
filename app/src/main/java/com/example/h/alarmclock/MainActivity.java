@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_layout);
 
+        getSupportActionBar().setElevation(2);
+        getSupportActionBar().setTitle("Alarms");
+
         recyclerView = findViewById(R.id.recycler_view);
 
         // Setup swiping feature and RecyclerView

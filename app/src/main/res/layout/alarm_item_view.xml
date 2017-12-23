@@ -3,7 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+
+    >
 
     <FrameLayout
         android:id="@+id/container"
@@ -17,6 +21,8 @@
         <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             >
 
             <TextView
@@ -26,7 +32,7 @@
                 android:text="7.00"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="32sp"
-                android:textColor="#000"
+                android:textColor="@color/colorAccent"
                 />
 
             <TextView
@@ -34,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PM"
+                android:textColor="@color/colorAccent"
                 android:layout_toEndOf="@+id/alarm_time_digits"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_alignBaseline="@id/alarm_time_digits"
@@ -45,7 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@id/alarm_time_digits"
-                android:text="Everyday" />
+                android:text="Everyday"
+                android:textColor="@color/colorAccent"
+                />
 
             <Switch
                 android:id="@+id/alarm_switch"
@@ -54,7 +63,6 @@
                 android:layout_alignBottom="@+id/alarm_time_ampm"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="8dp"
-
                  />
 
 
