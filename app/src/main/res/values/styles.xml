@@ -9,6 +9,9 @@
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
-
+    <style name="SwitchTheme" parent="AppTheme">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorSwitchThumbNormal">@color/colorAccent</item>
+    </style>
 
 </resources>

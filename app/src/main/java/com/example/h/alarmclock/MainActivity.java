@@ -1,6 +1,7 @@
 package com.example.h.alarmclock;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void startNewAlarmActivity(View v){
+        Intent i = new Intent(this,AlarmPickerActivity.class);
+        startActivity(i);
     }
 
     public static class DeleteAlarmEvent { /* Additional fields if needed */ }

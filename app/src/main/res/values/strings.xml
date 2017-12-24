@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Motivational Alarm Clock</string>
+
+    <string-array name="repeat_options">
+        <item>None</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+    </string-array>
 </resources>
