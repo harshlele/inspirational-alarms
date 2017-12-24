@@ -27,7 +27,9 @@
         android:clickable="true"
         android:textSize="24sp"
         android:text="6.00AM"
-        android:focusable="true" />
+        android:focusable="true"
+        android:onClick="showTimePicker"
+        />
 
     <View
         android:id="@+id/line1"
@@ -126,6 +128,15 @@
         android:layout_below="@+id/motivation_text"
         android:layout_toStartOf="@id/motivation_switch"
         android:text="Show a motivational image after you dismiss the alarm" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/motivation_desc_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Save" />
 
 
 </RelativeLayout>

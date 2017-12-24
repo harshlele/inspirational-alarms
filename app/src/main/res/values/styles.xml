@@ -14,4 +14,7 @@
         <item name="colorSwitchThumbNormal">@color/colorAccent</item>
     </style>
 
+    <style name="TimePickerTheme" parent="AppTheme">
+        <item name="colorAccent">#000</item>
+    </style>
 </resources>
