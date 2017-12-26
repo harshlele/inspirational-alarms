@@ -6,4 +6,11 @@
         <item>Daily</item>
         <item>Weekly</item>
     </string-array>
+
+    <string-array name="motivation_options">
+        <item>None</item>
+        <item>Show Text</item>
+        <item>Show a Photo</item>
+        <item>Play a Youtube Video</item>
+    </string-array>
 </resources>

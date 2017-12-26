@@ -17,7 +17,15 @@ public class Alarm {
 
     private int repeat;
     private boolean snooze = true;
+
     private boolean motivation = true;
+    private int mot_type;
+    public static int MOT_NONE = 3;
+    public static int MOT_TEXT = 4;
+    public static int MOT_IMG = 5;
+    public static int MOT_VID = 6;
+
+
 
     public Alarm() {
         id = new Random().nextInt(9000) + 1000;
@@ -67,4 +75,11 @@ public class Alarm {
         this.motivation = motivation;
     }
 
+    public int getMot_type() {
+        return mot_type;
+    }
+
+    public void setMot_type(int mot_type) {
+        this.mot_type = mot_type;
+    }
 }
