@@ -29,20 +29,27 @@ import java.util.Map;
 
 public class AlarmPickerActivity extends AppCompatActivity {
 
+    //TextViews that show the current set time and ringtone of the alarm
     private TextView currentAlarmTimeText,currentAlarmRingtoneText;
+
+    //boolean vars indicating whether the spinners have loaded or not
     private boolean initialEventMot = false;
     private boolean initialEventRep = false;
 
+    //Spinners to select options for alarm repeat time and motivation types
     private Spinner motivationOptionsSpinner, repeatOptionsSpinner;
+    //Textview that shows the current set motivation text, image URI or youtube URL
     private TextView motivationSelectedText;
-
+    //Used while choosing an image from the gallery.
     private static int PICK_IMAGE_REQUEST = 6999;
-
+    //URI of the current set ringtone of alarm
     private Uri currentRingtoneUri;
 
+    //Type of alarm repeat and motivation options.
     private int selectedMotivationType = Alarm.MOT_NONE;
     private int selectedRepeatType = Alarm.REPEAT_NONE;
 
+    //Current set 24-hour hour and min of alarm
     private int currentAlarmHour, currentAlarmMin;
 
     @Override
@@ -50,13 +57,19 @@ public class AlarmPickerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_picker);
 
+        //init views
         currentAlarmTimeText = findViewById(R.id.current_time_text);
         currentAlarmRingtoneText = findViewById(R.id.current_ringtone_text);
         motivationOptionsSpinner = findViewById(R.id.motivation_options_spinner);
         repeatOptionsSpinner = findViewById(R.id.repeat_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
+
+
         getSupportActionBar().setTitle("New Alarm");
 
+
+        //listener for motivation types spinner. When an item is changed, display the motivationSelectedText,
+        //and do other things to get the user to select text/image/video that has to be played on dismiss
         motivationOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -91,6 +104,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+
+        //listener for repeat options spinner
         repeatOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -118,11 +133,13 @@ public class AlarmPickerActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        //Get the default alarm ringtone, and show it in the textview
         getDefaultRingtone();
         String defaultRingtoneTitle = RingtoneManager.getRingtone(getApplicationContext(),currentRingtoneUri).getTitle(getApplicationContext());
         currentAlarmRingtoneText.setText(defaultRingtoneTitle);
     }
 
+    //Shows a dialog with text entry to get text that has to be shown after dismiss
     private void getQuoteText(){
         new LovelyTextInputDialog(this,R.style.TimePickerTheme)
                 .setTitle("Show Text")
@@ -136,7 +153,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                 .show();
     }
 
-
+    //Shows a dialog with text entry to get URL of video that has to be played.
     private void getYTVideoURL(){
         new LovelyTextInputDialog(this, R.style.TimePickerTheme)
                 .setTitle("Play a Youtube Video")
@@ -150,6 +167,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    //Starts an intent to go to the image picker to choose the image.
     private void getImageURI(){
         Intent intent = new Intent();
         // Show only images, no videos or anything else
@@ -170,6 +189,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     }
 
+    // get the URI of default alarm ringtone
     private void getDefaultRingtone(){
         currentRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),RingtoneManager.TYPE_ALARM);
     }
@@ -186,18 +206,20 @@ public class AlarmPickerActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    //Shows a time picker for picking alarm time
     public void showTimePicker(View v){
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
-
+    //Shows a ringtone with all the alarm ringtones in the system.
     public void showRingtonePicker(View v){
 
         RingtoneManager manager = new RingtoneManager(this);
         manager.setType(RingtoneManager.TYPE_ALARM);
         Cursor cursor = manager.getCursor();
 
+        //make a hashmap with all titles as keys,and URI as values
         final Map<String, String> list = new HashMap<>();
         while (cursor.moveToNext()) {
             String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
@@ -209,8 +231,10 @@ public class AlarmPickerActivity extends AppCompatActivity {
             list.put(notificationTitle, notificationUri);
         }
 
+        //make an array of all the keys(ie. titles) of hashmap.
         String[] items = list.keySet().toArray(new String[list.keySet().size()]);
 
+        //Show a multi-choice dialog that allows you to choose your ringtone.
         new LovelyChoiceDialog(this,R.style.SwitchTheme)
                 .setTitle("Set Ringtone")
                 .setItems(items, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
@@ -223,6 +247,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     }
 
+
+    //Event generated when user sets the time for alarm
     public void setCurrentAlarmTimeText(String text){
         currentAlarmTimeText.setText(text);
     }
@@ -238,6 +264,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
             this.h = h;
             this.m = m;
 
+            //convert 24h to AM/PM.
             if(h <= 12){
                 hour = String.valueOf(h);
                 ampm = "AM";
@@ -266,6 +293,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
         setCurrentAlarmTimeText(event.hour + ":" + event.min + event.ampm);
     }
 
+    //Time Picker dialog
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 

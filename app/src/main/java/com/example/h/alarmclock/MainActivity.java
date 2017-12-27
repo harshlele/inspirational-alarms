@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_layout);
 
+        //reduce action bar shadow
         getSupportActionBar().setElevation(2);
         getSupportActionBar().setTitle("Alarms");
 
@@ -72,11 +73,13 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    //fired when the fab is clicked
     public void startNewAlarmActivity(View v){
         Intent i = new Intent(this,AlarmPickerActivity.class);
         startActivity(i);
     }
 
+    // Event for when an alarm is swiped away.
     public static class DeleteAlarmEvent { /* Additional fields if needed */ }
 
 
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
     }
 
-
+    //placeholder, will probably be removed
     static class MyItem {
         public final long id;
         public final String text;
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //swipable recyclerview adapter
     static class MyViewHolder extends AbstractSwipeableItemViewHolder {
         FrameLayout containerView;
 
@@ -181,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onPerformAction() {
                 adapter.mItems.remove(position);
                 adapter.notifyItemRemoved(position);
+                //send a message using EventBus
                 EventBus.getDefault().post(new DeleteAlarmEvent());
             }
         }
