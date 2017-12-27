@@ -43,6 +43,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
     private int selectedMotivationType = Alarm.MOT_NONE;
     private int selectedRepeatType = Alarm.REPEAT_NONE;
 
+    private int currentAlarmHour, currentAlarmMin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,8 +231,13 @@ public class AlarmPickerActivity extends AppCompatActivity {
         String hour;
         String min;
         String ampm;
+        int h,m;
 
         public TimeSetEvent(int h, int m){
+
+            this.h = h;
+            this.m = m;
+
             if(h <= 12){
                 hour = String.valueOf(h);
                 ampm = "AM";
@@ -254,6 +261,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(TimeSetEvent event) {
+        currentAlarmHour = event.h;
+        currentAlarmMin = event.m;
         setCurrentAlarmTimeText(event.hour + ":" + event.min + event.ampm);
     }
 
