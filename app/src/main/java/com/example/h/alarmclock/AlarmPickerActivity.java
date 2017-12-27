@@ -25,13 +25,16 @@ import java.util.Calendar;
 public class AlarmPickerActivity extends AppCompatActivity {
 
     private TextView currentAlarmTimetext;
-    private boolean initialEvent = false;
-    private Spinner motivationOptionsSpinner;
+    private boolean initialEventMot = false;
+    private boolean initialEventRep = false;
+
+    private Spinner motivationOptionsSpinner, repeatOptionsSpinner;
     private TextView motivationSelectedText;
 
     private static int PICK_IMAGE_REQUEST = 6999;
 
     private int selectedMotivationType = Alarm.MOT_NONE;
+    private int selectedRepeatType = Alarm.REPEAT_NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +43,15 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
         currentAlarmTimetext = findViewById(R.id.current_time_text);
         motivationOptionsSpinner = findViewById(R.id.motivation_options_spinner);
+        repeatOptionsSpinner = findViewById(R.id.repeat_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
         getSupportActionBar().setTitle("New Alarm");
 
         motivationOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(!initialEvent){
-                    initialEvent = true;
+                if(!initialEventMot){
+                    initialEventMot = true;
                 }
                 else{
                     switch (String.valueOf(adapterView.getItemAtPosition(i))){
@@ -74,9 +78,34 @@ public class AlarmPickerActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
+        repeatOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(!initialEventRep){
+                    initialEventRep = true;
+                }
+
+                else {
+
+                    switch (String.valueOf(adapterView.getItemAtPosition(i))) {
+                        case "None":
+                            selectedRepeatType =Alarm.REPEAT_NONE;
+                            break;
+                        case "Daily":
+                            selectedRepeatType = Alarm.REPEAT_DAILY;
+                            break;
+                        case "Weekly":
+                            selectedRepeatType = Alarm.REPEAT_WEEKLY;
+                            break;
+                    }
+                }
             }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
     }

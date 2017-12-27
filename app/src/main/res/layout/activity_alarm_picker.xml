@@ -9,27 +9,32 @@
 
     <TextView
         android:id="@+id/time_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Time"
         android:textColor="#000"
-        android:clickable="true"
-        android:focusable="true"
         />
 
     <TextView
         android:id="@+id/current_time_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/time_text"
         android:layout_marginTop="8dp"
-        android:clickable="true"
         android:textSize="24sp"
-        android:text="6.00AM"
-        android:focusable="true"
-        android:onClick="showTimePicker"
+        android:text="6:00AM"
+
         />
+
+    <Button
+        android:id="@+id/change_time_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/current_time_text"
+        android:layout_below="@+id/time_text"
+        android:onClick="showTimePicker"
+        android:text="Change" />
 
     <View
         android:id="@+id/line1"
@@ -37,7 +42,7 @@
         android:layout_width="match_parent"
         android:background="#eee"
         android:layout_marginBottom="8dp"
-        android:layout_below="@id/current_time_text"/>
+        android:layout_below="@id/change_time_btn"/>
 
     <TextView
         android:id="@+id/repeat_text"
@@ -126,7 +131,7 @@
         android:entries="@array/motivation_options"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         />
 
 
@@ -145,7 +150,7 @@
         android:layout_width="match_parent"
         android:background="#eee"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/selected_motivation_text"
         />
 
@@ -159,6 +164,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Save" />
+
+
 
 
 </RelativeLayout>
