@@ -24,14 +24,13 @@
         android:layout_marginTop="8dp"
         android:textSize="24sp"
         android:text="6:00AM"
-
         />
 
     <Button
         android:id="@+id/change_time_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/current_time_text"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/time_text"
         android:onClick="showTimePicker"
         android:text="Change" />
@@ -154,17 +153,55 @@
         android:layout_below="@id/selected_motivation_text"
         />
 
+    <TextView
+        android:id="@+id/ringtone_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alarm Ringtone"
+        android:textColor="#000"
+        android:layout_below="@id/line4"
+        />
+
+    <TextView
+        android:id="@+id/current_ringtone_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ringtone_text"
+        android:layout_marginTop="8dp"
+        android:text=""
+        />
+
+    <Button
+        android:id="@+id/change_ringtone_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/current_ringtone_text"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:onClick="showRingtonePicker"
+        android:text="Change"/>
+
+
+    <View
+        android:id="@+id/line5"
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="#eee"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/current_ringtone_text"
+        />
 
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/line4"
+        android:layout_below="@+id/line5"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Save" />
-
 
 
 

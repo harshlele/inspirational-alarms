@@ -3,6 +3,8 @@ package com.example.h.alarmclock;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,10 +24,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AlarmPickerActivity extends AppCompatActivity {
 
-    private TextView currentAlarmTimetext;
+    private TextView currentAlarmTimeText,currentAlarmRingtoneText;
     private boolean initialEventMot = false;
     private boolean initialEventRep = false;
 
@@ -32,6 +37,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
     private TextView motivationSelectedText;
 
     private static int PICK_IMAGE_REQUEST = 6999;
+
+    private Uri currentRingtoneUri;
 
     private int selectedMotivationType = Alarm.MOT_NONE;
     private int selectedRepeatType = Alarm.REPEAT_NONE;
@@ -41,7 +48,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_picker);
 
-        currentAlarmTimetext = findViewById(R.id.current_time_text);
+        currentAlarmTimeText = findViewById(R.id.current_time_text);
+        currentAlarmRingtoneText = findViewById(R.id.current_ringtone_text);
         motivationOptionsSpinner = findViewById(R.id.motivation_options_spinner);
         repeatOptionsSpinner = findViewById(R.id.repeat_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
@@ -108,6 +116,9 @@ public class AlarmPickerActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
+        getDefaultRingtone();
+        String defaultRingtoneTitle = RingtoneManager.getRingtone(getApplicationContext(),currentRingtoneUri).getTitle(getApplicationContext());
+        currentAlarmRingtoneText.setText(defaultRingtoneTitle);
     }
 
     private void getQuoteText(){
@@ -157,6 +168,9 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     }
 
+    private void getDefaultRingtone(){
+        currentRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),RingtoneManager.TYPE_ALARM);
+    }
 
     @Override
     public void onStart() {
@@ -175,8 +189,40 @@ public class AlarmPickerActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
-    public void setCurrentAlarmTimetext(String text){
-        currentAlarmTimetext.setText(text);
+
+    public void showRingtonePicker(View v){
+
+        RingtoneManager manager = new RingtoneManager(this);
+        manager.setType(RingtoneManager.TYPE_ALARM);
+        Cursor cursor = manager.getCursor();
+
+        final Map<String, String> list = new HashMap<>();
+        while (cursor.moveToNext()) {
+            String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+            String uriColumnIndex = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
+            String uriIdColumnIndex = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
+
+            String notificationUri = Uri.parse(uriColumnIndex + "/" + uriIdColumnIndex).toString();
+
+            list.put(notificationTitle, notificationUri);
+        }
+
+        String[] items = list.keySet().toArray(new String[list.keySet().size()]);
+
+        new LovelyChoiceDialog(this,R.style.SwitchTheme)
+                .setTitle("Set Ringtone")
+                .setItems(items, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                    @Override
+                    public void onItemSelected(int position, String item) {
+                        currentAlarmRingtoneText.setText(item);
+                        currentRingtoneUri = Uri.parse(list.get(item));
+                    }
+                }).show();
+
+    }
+
+    public void setCurrentAlarmTimeText(String text){
+        currentAlarmTimeText.setText(text);
     }
 
     private static class TimeSetEvent{
@@ -208,7 +254,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(TimeSetEvent event) {
-        setCurrentAlarmTimetext(event.hour + ":" + event.min + event.ampm);
+        setCurrentAlarmTimeText(event.hour + ":" + event.min + event.ampm);
     }
 
     public static class TimePickerFragment extends DialogFragment
