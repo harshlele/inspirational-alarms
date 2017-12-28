@@ -9,35 +9,37 @@ import java.util.Random;
  */
 
 public class Alarm {
-
+    //id, generated on initialisation
     private int id;
-
+    //hour and minute
     private int hour,min;
 
+    //repeat type
     private int repeat;
     public static int REPEAT_NONE = 0;
     public static int REPEAT_DAILY = 1;
     public static int REPEAT_WEEKLY = 2;
 
+    //whether the snooze option is to be shown or not
     private boolean snooze = true;
 
+    //motivation type
     private int mot_type;
     public static int MOT_NONE = 3;
     public static int MOT_TEXT = 4;
     public static int MOT_IMG = 5;
     public static int MOT_VID = 6;
 
+    //the motivation data(text/video url/image URI)
     private String motivationData;
-
+    //ringtone URI
     private Uri ringtoneUri;
 
     public String getMotivationData() {
         return motivationData;
     }
 
-    public Uri getRingtoneUri() {
-        return ringtoneUri;
-    }
+    public Uri getRingtoneUri() {return ringtoneUri;}
 
     public void setRingtoneUri(Uri ringtoneUri) {
         this.ringtoneUri = ringtoneUri;

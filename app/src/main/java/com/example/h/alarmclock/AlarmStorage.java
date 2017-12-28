@@ -14,8 +14,8 @@ import java.util.List;
 
 public class AlarmStorage {
 
-    private static final String TAG = "AlarmStorage Log";
 
+    //Key of the List that stores all ids
     private static final String IDLIST_TAG = "all-ids";
 
     private Context c;

@@ -248,7 +248,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     }
 
-    //save the alarm
+    //save the alarm and close the activity
     public void saveAlarm(View v){
         Alarm a = new Alarm();
         a.setHour(currentAlarmHour);
