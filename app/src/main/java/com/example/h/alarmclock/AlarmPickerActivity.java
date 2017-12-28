@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
@@ -38,10 +41,13 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     //Spinners to select options for alarm repeat time and motivation types
     private Spinner motivationOptionsSpinner, repeatOptionsSpinner;
+
     //Textview that shows the current set motivation text, image URI or youtube URL
     private TextView motivationSelectedText;
+
     //Used while choosing an image from the gallery.
     private static int PICK_IMAGE_REQUEST = 6999;
+
     //URI of the current set ringtone of alarm
     private Uri currentRingtoneUri;
 
@@ -50,7 +56,10 @@ public class AlarmPickerActivity extends AppCompatActivity {
     private int selectedRepeatType = Alarm.REPEAT_NONE;
 
     //Current set 24-hour hour and min of alarm
-    private int currentAlarmHour, currentAlarmMin;
+    private int currentAlarmHour = 6;
+    private int currentAlarmMin  = 0;
+
+    private Switch snoozeSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +72,12 @@ public class AlarmPickerActivity extends AppCompatActivity {
         motivationOptionsSpinner = findViewById(R.id.motivation_options_spinner);
         repeatOptionsSpinner = findViewById(R.id.repeat_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
+        snoozeSwitch = findViewById(R.id.snooze_switch);
 
+
+        Log.d("LOG!!", "onCreate: " + snoozeSwitch.isChecked());
 
         getSupportActionBar().setTitle("New Alarm");
-
 
         //listener for motivation types spinner. When an item is changed, display the motivationSelectedText,
         //and do other things to get the user to select text/image/video that has to be played on dismiss
@@ -137,6 +148,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
         getDefaultRingtone();
         String defaultRingtoneTitle = RingtoneManager.getRingtone(getApplicationContext(),currentRingtoneUri).getTitle(getApplicationContext());
         currentAlarmRingtoneText.setText(defaultRingtoneTitle);
+
     }
 
     //Shows a dialog with text entry to get text that has to be shown after dismiss
@@ -194,17 +206,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
         currentRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),RingtoneManager.TYPE_ALARM);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
 
     //Shows a time picker for picking alarm time
     public void showTimePicker(View v){
@@ -245,6 +246,40 @@ public class AlarmPickerActivity extends AppCompatActivity {
                     }
                 }).show();
 
+    }
+
+    //save the alarm
+    public void saveAlarm(View v){
+        Alarm a = new Alarm();
+        a.setHour(currentAlarmHour);
+        a.setMin(currentAlarmMin);
+        a.setRepeat(selectedRepeatType);
+        a.setSnooze(snoozeSwitch.isChecked());
+        a.setMot_type(selectedMotivationType);
+        a.setMotivationData(motivationSelectedText.getText().toString());
+        a.setRingtoneUri(currentRingtoneUri);
+
+        AlarmStorage storage = new AlarmStorage(getApplicationContext());
+        storage.saveAlarm(a);
+
+        Toast.makeText(getApplicationContext(),
+                    "Alarm set for " + currentAlarmHour + ":" + currentAlarmMin,
+                    Toast.LENGTH_SHORT).show();
+
+        this.finish();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.h.alarmclock;
 
+import android.net.Uri;
+
 import java.util.Random;
 
 /**
@@ -11,24 +13,42 @@ public class Alarm {
     private int id;
 
     private int hour,min;
+
+    private int repeat;
     public static int REPEAT_NONE = 0;
     public static int REPEAT_DAILY = 1;
     public static int REPEAT_WEEKLY = 2;
 
-    private int repeat;
     private boolean snooze = true;
 
-    private boolean motivation = true;
     private int mot_type;
     public static int MOT_NONE = 3;
     public static int MOT_TEXT = 4;
     public static int MOT_IMG = 5;
     public static int MOT_VID = 6;
 
+    private String motivationData;
 
+    private Uri ringtoneUri;
+
+    public String getMotivationData() {
+        return motivationData;
+    }
+
+    public Uri getRingtoneUri() {
+        return ringtoneUri;
+    }
+
+    public void setRingtoneUri(Uri ringtoneUri) {
+        this.ringtoneUri = ringtoneUri;
+    }
+
+    public void setMotivationData(String motivationData) {
+        this.motivationData = motivationData;
+    }
 
     public Alarm() {
-        id = new Random().nextInt(9000) + 1000;
+        id = new Random().nextInt(90000) + 10000;
     }
 
     public int getId(){
@@ -65,14 +85,6 @@ public class Alarm {
 
     public void setSnooze(boolean snooze) {
         this.snooze = snooze;
-    }
-
-    public boolean isMotivation() {
-        return motivation;
-    }
-
-    public void setMotivation(boolean motivation) {
-        this.motivation = motivation;
     }
 
     public int getMot_type() {
