@@ -261,10 +261,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
         AlarmStorage storage = new AlarmStorage(getApplicationContext());
         storage.saveAlarm(a);
-
         Toast.makeText(getApplicationContext(),
-                    "Alarm set for " + currentAlarmHour + ":" + currentAlarmMin,
-                    Toast.LENGTH_SHORT).show();
+                    "Alarm set for " + a.getTimePretty(), Toast.LENGTH_SHORT).show();
 
         this.finish();
     }

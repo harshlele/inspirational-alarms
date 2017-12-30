@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
@@ -26,7 +27,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +38,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-
+    private AlarmStorage alarmStorage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,11 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
 
+        alarmStorage = new AlarmStorage(getApplicationContext());
+
         // Setup swiping feature and RecyclerView
         RecyclerViewSwipeManager swipeMgr = new RecyclerViewSwipeManager();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(swipeMgr.createWrappedAdapter(new MyAdapter()));
+        recyclerView.setAdapter(swipeMgr.createWrappedAdapter(new MyAdapter(alarmStorage.getAllAlarms())));
 
         swipeMgr.attachRecyclerView(recyclerView);
     }
@@ -88,24 +90,17 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
     }
 
-    //placeholder, will probably be removed
-    static class MyItem {
-        public final long id;
-        public final String text;
-
-        public MyItem(long id, String text) {
-            this.id = id;
-            this.text = text;
-        }
-    }
-
     //swipable recyclerview adapter
     static class MyViewHolder extends AbstractSwipeableItemViewHolder {
         FrameLayout containerView;
+        TextView alarmDigitsText, alarmAMPMText, alarmRepeatText;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             containerView = itemView.findViewById(R.id.container);
+            alarmDigitsText = itemView.findViewById(R.id.alarm_time_digits);
+            alarmAMPMText = itemView.findViewById(R.id.alarm_time_ampm);
+            alarmRepeatText = itemView.findViewById(R.id.alarm_repeat);
         }
 
         @Override
@@ -118,20 +113,16 @@ public class MainActivity extends AppCompatActivity {
         interface Swipeable extends SwipeableItemConstants {
         }
 
-        List<MyItem> mItems;
+        List<Alarm> mItems;
 
-        public MyAdapter() {
+        public MyAdapter(List<Alarm> list) {
             setHasStableIds(true); // this is required for swiping feature.
-
-            mItems = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                mItems.add(new MyItem(i, "Item " + i));
-            }
+            mItems = list;
         }
 
         @Override
         public long getItemId(int position) {
-            return mItems.get(position).id; // need to return stable (= not change even after position changed) value
+            return mItems.get(position).getId(); // need to return stable (= not change even after position changed) value
         }
 
         @Override
@@ -142,6 +133,29 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
+            Alarm a = mItems.get(position);
+
+            String repeat = "";
+            if(a.getRepeat() == Alarm.REPEAT_NONE){
+                repeat = "One Time";
+            }
+            else if(a.getRepeat() == Alarm.REPEAT_DAILY){
+                repeat = "Daily";
+            }
+            else if(a.getRepeat() == Alarm.REPEAT_WEEKLY){
+                repeat = "Weekly";
+            }
+
+            String ampm;
+            ampm = "AM";
+            if(a.getHour() > 12){
+                ampm = "PM";
+            }
+
+            holder.alarmDigitsText.setText(a.getTimePretty());
+            holder.alarmAMPMText.setText(ampm);
+            holder.alarmRepeatText.setText(repeat);
+
         }
 
         @Override

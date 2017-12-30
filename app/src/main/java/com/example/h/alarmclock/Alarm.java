@@ -96,4 +96,23 @@ public class Alarm {
     public void setMot_type(int mot_type) {
         this.mot_type = mot_type;
     }
+
+    public String getTimePretty(){
+        String t = "";
+
+        int h2 = hour;
+        if(hour > 12){
+            h2 = hour - 12;
+        }
+        if(h2 < 10) t+="0";
+        t+=String.valueOf(h2);
+
+        t+=":";
+
+        if(min < 10) t+="0";
+        t+=String.valueOf(min);
+
+        return t;
+    }
+
 }

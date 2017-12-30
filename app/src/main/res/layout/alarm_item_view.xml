@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-
     >
 
     <FrameLayout
@@ -63,6 +62,7 @@
                 android:layout_alignBottom="@+id/alarm_time_ampm"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="8dp"
+                android:checked="true"
                  />
 
 
