@@ -35,6 +35,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
     private TextView currentAlarmTimeText,currentAlarmRingtoneText;
 
     //boolean vars indicating whether the spinners have loaded or not
+    //(onSelectedListener is also fired when the view is loaded)
     private boolean initialEventMot = false;
     private boolean initialEventRep = false;
 
@@ -61,7 +62,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //switch to set snooze switch on or off
     private Switch snoozeSwitch;
 
-
+    //indicates whether an alarm is being edited, and the actual alarm object(because alarm ids can't be changed)
     private boolean isEditing = false;
     private Alarm editedAlarm;
 
@@ -152,6 +153,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     }
 
+    //close the activity when the back button is pressed so all the view values go back to default positions
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -258,7 +260,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //save the alarm and close the activity
     public void saveAlarm(View v){
         Alarm a;
-
+        //if this is an alarm that is being edited, use that exact object(because ids can't be changed)
         if(isEditing) a = editedAlarm;
         else a = new Alarm();
 
@@ -277,6 +279,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
         EventBus.getDefault().postSticky(new Events.AlarmAddedEvent());
 
+        //set isEditing back to false so it isn't considered twice
         isEditing = false;
         editedAlarm = null;
 
@@ -368,38 +371,40 @@ public class AlarmPickerActivity extends AppCompatActivity {
     }
 
 
+    //Fired when an alarm is to be edited
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.AlarmEditEvent event) {
+        //set it to true so it can be used in saveAlarm()
         isEditing = true;
+        editedAlarm = event.clickedAlarm;
 
         getSupportActionBar().setTitle("Edit Alarm");
 
-
-        editedAlarm = event.clickedAlarm;
-
+        //set the time
         String timeText = editedAlarm.getTimePretty();
         if(editedAlarm.getHour() > 12) timeText+="PM";
         else timeText+="AM";
-
         currentAlarmTimeText.setText(timeText);
         currentAlarmHour = editedAlarm.getHour();
         currentAlarmMin = editedAlarm.getMin();
 
+        //set the exact repeat option
         selectedRepeatType = editedAlarm.getRepeat();
         if(selectedRepeatType == Alarm.REPEAT_NONE) repeatOptionsSpinner.setSelection(0);
         else if(selectedRepeatType == Alarm.REPEAT_DAILY) repeatOptionsSpinner.setSelection(1);
         else if(selectedRepeatType == Alarm.REPEAT_WEEKLY) repeatOptionsSpinner.setSelection(2);
-
+        //set the snooze switch
         snoozeSwitch.setChecked(editedAlarm.isSnooze());
 
+        //set the motivation type
         selectedMotivationType = editedAlarm.getMot_type();
         if(selectedMotivationType == Alarm.MOT_NONE) motivationOptionsSpinner.setSelection(0);
         else if(selectedMotivationType == Alarm.MOT_TEXT) motivationOptionsSpinner.setSelection(1);
         else if(selectedMotivationType == Alarm.MOT_IMG) motivationOptionsSpinner.setSelection(2);
         else if(selectedMotivationType == Alarm.MOT_VID) motivationOptionsSpinner.setSelection(3);
-
+        //set motivation data
         motivationSelectedText.setText(editedAlarm.getMotivationData());
-
+        //remove this sticky event so it isn't fired twice
         EventBus.getDefault().removeStickyEvent(event);
     }
 

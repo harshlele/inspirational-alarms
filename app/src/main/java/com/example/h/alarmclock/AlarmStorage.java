@@ -22,12 +22,14 @@ public class AlarmStorage {
         Paper.init(context);
     }
 
+    //get all ids in a list
     public List<String> getAllIds() {
         List<String> idList;
         idList = Paper.book().read(IDLIST_TAG,new ArrayList<String>());
         return idList;
     }
 
+    //get all alarms
     public List<Alarm> getAllAlarms(){
         List<String> ids = getAllIds();
         List<Alarm> alarmList = new ArrayList<>();
@@ -38,11 +40,13 @@ public class AlarmStorage {
         return alarmList;
     }
 
+    //store an alarm
     public void saveAlarm(Alarm a){
         Paper.book().write(String.valueOf(a.getId()),a);
 
         List<String> idList = getAllIds();
 
+        //check to see if this id already exists so duplicate ids aren't stored
         if(!idList.contains(String.valueOf(a.getId()))) {
             idList.add(String.valueOf(a.getId()));
             Paper.book().write(IDLIST_TAG,idList);

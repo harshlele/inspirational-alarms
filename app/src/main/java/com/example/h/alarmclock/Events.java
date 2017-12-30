@@ -18,6 +18,7 @@ public class Events {
     //For when an alarm is added
     public static class AlarmAddedEvent{}
 
+    //For when an alarm is clicked
     public static class AlarmClickEvent{
         Alarm clickedAlarm;
 
@@ -26,6 +27,7 @@ public class Events {
         }
     }
 
+    //For when an alarm is to be edited
     public static class AlarmEditEvent{
         Alarm clickedAlarm;
 

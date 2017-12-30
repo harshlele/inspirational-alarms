@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MyAdapter adapter;
 
-    private boolean alarmClicked = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,9 +62,11 @@ public class MainActivity extends AppCompatActivity {
         RecyclerViewSwipeManager swipeMgr = new RecyclerViewSwipeManager();
 
         adapter = new MyAdapter(alarmStorage.getAllAlarms());
+        //if there are no alarms, show the no alarms textview
         if(adapter.alarms.size() == 0){
             emptyListText.setVisibility(View.VISIBLE);
         }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(swipeMgr.createWrappedAdapter(adapter));
 
@@ -91,27 +92,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    //fired when an alarm is deleted
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.DeleteAlarmEvent event) {
         alarmStorage.deleteAlarm(event.deletedAlarm.getId());
         Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
+        //if, after deleting this alarm, there are no alarms left, show the no alarms text
         if(adapter.alarms.size() == 0){
             emptyListText.setVisibility(View.VISIBLE);
         }
     }
 
+    //sticky event fired by AlarmPickerActivity when an alarm is added(ie, when the "Save" button is clicked)
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.AlarmAddedEvent event) {
         adapter.setAlarmList(alarmStorage.getAllAlarms());
         adapter.notifyDataSetChanged();
+        // make sure the no alarm text is invisible
         if(adapter.alarms.size() > 0){
             emptyListText.setVisibility(View.INVISIBLE);
         }
 
     }
 
-
+    //fired when an alarm is clicked. This just fires another sticky event that AlarmPickerActivity listens for
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.AlarmClickEvent event){
         EventBus.getDefault().postSticky(new Events.AlarmEditEvent(event.clickedAlarm));
@@ -150,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             alarms = list;
         }
 
+        //set alarm list after adapter has been initialised
         public void setAlarmList(List<Alarm> list){
             alarms = list;
         }
@@ -168,7 +173,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             Alarm a = alarms.get(position);
+            //the alarm position is sent inside an event
             final int p = position;
+            //get repeat text
             String repeat = "";
             if(a.getRepeat() == Alarm.REPEAT_NONE){
                 repeat = "One Time";
@@ -179,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             else if(a.getRepeat() == Alarm.REPEAT_WEEKLY){
                 repeat = "Weekly";
             }
-
+            //get AM/PM text
             String ampm;
             ampm = "AM";
             if(a.getHour() > 12){
@@ -190,11 +197,11 @@ public class MainActivity extends AppCompatActivity {
             holder.alarmAMPMText.setText(ampm);
             holder.alarmRepeatText.setText(repeat);
 
+            //click listener for view, just fires an event
             holder.containerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     EventBus.getDefault().postSticky(new Events.AlarmClickEvent(alarms.get(p)));
-
                 }
             });
         }

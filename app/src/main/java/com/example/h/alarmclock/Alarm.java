@@ -98,6 +98,8 @@ public class Alarm implements Serializable {
         this.mot_type = mot_type;
     }
 
+
+    //Gives the time in a 12 hour format, in a string
     public String getTimePretty(){
         String t = "";
 
