@@ -89,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.DeleteAlarmEvent event) {
+        alarmStorage.deleteAlarm(event.deletedAlarm.getId());
         Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
+
     }
 
 
@@ -212,10 +214,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPerformAction() {
+                Alarm a = adapter.alarms.get(position);
                 adapter.alarms.remove(position);
                 adapter.notifyItemRemoved(position);
                 //send a message using EventBus
-                EventBus.getDefault().post(new Events.DeleteAlarmEvent());
+                EventBus.getDefault().post(new Events.DeleteAlarmEvent(a));
             }
         }
     }

@@ -7,7 +7,13 @@ package com.example.h.alarmclock;
 public class Events {
 
     // Event for when an alarm is swiped away.
-    public static class DeleteAlarmEvent { /* Additional fields if needed */ }
+    public static class DeleteAlarmEvent {
+        Alarm deletedAlarm;
+
+        public DeleteAlarmEvent(Alarm deletedAlarm) {
+            this.deletedAlarm = deletedAlarm;
+        }
+    }
 
     //For when an alarm is added
     public static class AlarmAddedEvent{}
