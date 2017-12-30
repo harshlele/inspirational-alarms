@@ -39,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AlarmStorage alarmStorage;
+    private TextView emptyListText;
 
     private MyAdapter adapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,16 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Alarms");
 
         recyclerView = findViewById(R.id.recycler_view);
-
+        emptyListText = findViewById(R.id.empty_list);
         alarmStorage = new AlarmStorage(getApplicationContext());
 
         // Setup swiping feature and RecyclerView
         RecyclerViewSwipeManager swipeMgr = new RecyclerViewSwipeManager();
 
         adapter = new MyAdapter(alarmStorage.getAllAlarms());
-
+        if(adapter.alarms.size() == 0){
+            emptyListText.setVisibility(View.VISIBLE);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(swipeMgr.createWrappedAdapter(adapter));
 
@@ -91,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
     public void onMessageEvent(Events.DeleteAlarmEvent event) {
         alarmStorage.deleteAlarm(event.deletedAlarm.getId());
         Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
-
+        if(adapter.alarms.size() == 0){
+            emptyListText.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -100,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
     public void onMessageEvent(Events.AlarmAddedEvent event) {
         adapter.setAlarmList(alarmStorage.getAllAlarms());
         adapter.notifyDataSetChanged();
+        if(adapter.alarms.size() > 0){
+            emptyListText.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 

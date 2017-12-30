@@ -28,7 +28,7 @@
                 android:id="@+id/alarm_time_digits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="7.00"
+                android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="32sp"
                 android:textColor="@color/colorAccent"
@@ -38,7 +38,7 @@
                 android:id="@+id/alarm_time_ampm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PM"
+                android:text=""
                 android:textColor="@color/colorAccent"
                 android:layout_toEndOf="@+id/alarm_time_digits"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@id/alarm_time_digits"
-                android:text="Everyday"
+                android:text=""
                 android:textColor="@color/colorAccent"
                 />
 
