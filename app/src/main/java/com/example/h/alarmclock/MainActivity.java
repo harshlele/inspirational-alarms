@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AlarmStorage alarmStorage;
 
+    private MyAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +59,10 @@ public class MainActivity extends AppCompatActivity {
         // Setup swiping feature and RecyclerView
         RecyclerViewSwipeManager swipeMgr = new RecyclerViewSwipeManager();
 
+        adapter = new MyAdapter(alarmStorage.getAllAlarms());
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(swipeMgr.createWrappedAdapter(new MyAdapter(alarmStorage.getAllAlarms())));
+        recyclerView.setAdapter(swipeMgr.createWrappedAdapter(adapter));
 
         swipeMgr.attachRecyclerView(recyclerView);
     }
@@ -81,14 +85,21 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    // Event for when an alarm is swiped away.
-    public static class DeleteAlarmEvent { /* Additional fields if needed */ }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(DeleteAlarmEvent event) {
+    public void onMessageEvent(Events.DeleteAlarmEvent event) {
         Snackbar.make(recyclerView,"Alarm Deleted", Snackbar.LENGTH_LONG).show();
     }
+
+
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Events.AlarmAddedEvent event) {
+        adapter.setAlarmList(alarmStorage.getAllAlarms());
+        adapter.notifyDataSetChanged();
+    }
+
 
     //swipable recyclerview adapter
     static class MyViewHolder extends AbstractSwipeableItemViewHolder {
@@ -113,16 +124,20 @@ public class MainActivity extends AppCompatActivity {
         interface Swipeable extends SwipeableItemConstants {
         }
 
-        List<Alarm> mItems;
+        List<Alarm> alarms;
 
         public MyAdapter(List<Alarm> list) {
             setHasStableIds(true); // this is required for swiping feature.
-            mItems = list;
+            alarms = list;
+        }
+
+        public void setAlarmList(List<Alarm> list){
+            alarms = list;
         }
 
         @Override
         public long getItemId(int position) {
-            return mItems.get(position).getId(); // need to return stable (= not change even after position changed) value
+            return alarms.get(position).getId(); // need to return stable (= not change even after position changed) value
         }
 
         @Override
@@ -133,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            Alarm a = mItems.get(position);
+            Alarm a = alarms.get(position);
 
             String repeat = "";
             if(a.getRepeat() == Alarm.REPEAT_NONE){
@@ -160,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mItems.size();
+            return alarms.size();
         }
 
         @Override
@@ -197,10 +212,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPerformAction() {
-                adapter.mItems.remove(position);
+                adapter.alarms.remove(position);
                 adapter.notifyItemRemoved(position);
                 //send a message using EventBus
-                EventBus.getDefault().post(new DeleteAlarmEvent());
+                EventBus.getDefault().post(new Events.DeleteAlarmEvent());
             }
         }
     }

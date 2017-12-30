@@ -264,6 +264,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),
                     "Alarm set for " + a.getTimePretty(), Toast.LENGTH_SHORT).show();
 
+        EventBus.getDefault().postSticky(new Events.AlarmAddedEvent());
+
         this.finish();
     }
 
