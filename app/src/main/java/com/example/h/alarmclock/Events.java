@@ -18,5 +18,21 @@ public class Events {
     //For when an alarm is added
     public static class AlarmAddedEvent{}
 
+    public static class AlarmClickEvent{
+        Alarm clickedAlarm;
+
+        public AlarmClickEvent(Alarm clickedAlarm) {
+            this.clickedAlarm = clickedAlarm;
+        }
+    }
+
+    public static class AlarmEditEvent{
+        Alarm clickedAlarm;
+
+        public AlarmEditEvent(Alarm clickedAlarm) {
+            this.clickedAlarm = clickedAlarm;
+        }
+    }
+
 
 }

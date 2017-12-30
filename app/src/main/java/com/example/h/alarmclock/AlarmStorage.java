@@ -40,9 +40,14 @@ public class AlarmStorage {
 
     public void saveAlarm(Alarm a){
         Paper.book().write(String.valueOf(a.getId()),a);
+
         List<String> idList = getAllIds();
-        idList.add(String.valueOf(a.getId()));
-        Paper.book().write(IDLIST_TAG,idList);
+
+        if(!idList.contains(String.valueOf(a.getId()))) {
+            idList.add(String.valueOf(a.getId()));
+            Paper.book().write(IDLIST_TAG,idList);
+        }
+
     }
 
     public Alarm getAlarm(String id){

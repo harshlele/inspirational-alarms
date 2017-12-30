@@ -23,7 +23,7 @@
         android:layout_below="@+id/time_text"
         android:layout_marginTop="8dp"
         android:textSize="24sp"
-        android:text="6:00AM"
+        android:text="06:00AM"
         />
 
     <Button

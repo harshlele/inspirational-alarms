@@ -31,7 +31,7 @@
         android:src="@drawable/ic_add_24dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="startNewAlarmActivity"
+        android:onClick="startAlarmPickerActivity"
         app:backgroundTint="@color/colorAccent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"

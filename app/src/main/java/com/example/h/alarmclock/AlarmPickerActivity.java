@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -59,7 +58,12 @@ public class AlarmPickerActivity extends AppCompatActivity {
     private int currentAlarmHour = 6;
     private int currentAlarmMin  = 0;
 
+    //switch to set snooze switch on or off
     private Switch snoozeSwitch;
+
+
+    private boolean isEditing = false;
+    private Alarm editedAlarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +77,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
         repeatOptionsSpinner = findViewById(R.id.repeat_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
         snoozeSwitch = findViewById(R.id.snooze_switch);
-
-
-        Log.d("LOG!!", "onCreate: " + snoozeSwitch.isChecked());
 
         getSupportActionBar().setTitle("New Alarm");
 
@@ -149,6 +150,12 @@ public class AlarmPickerActivity extends AppCompatActivity {
         String defaultRingtoneTitle = RingtoneManager.getRingtone(getApplicationContext(),currentRingtoneUri).getTitle(getApplicationContext());
         currentAlarmRingtoneText.setText(defaultRingtoneTitle);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 
     //Shows a dialog with text entry to get text that has to be shown after dismiss
@@ -250,7 +257,11 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     //save the alarm and close the activity
     public void saveAlarm(View v){
-        Alarm a = new Alarm();
+        Alarm a;
+
+        if(isEditing) a = editedAlarm;
+        else a = new Alarm();
+
         a.setHour(currentAlarmHour);
         a.setMin(currentAlarmMin);
         a.setRepeat(selectedRepeatType);
@@ -265,6 +276,9 @@ public class AlarmPickerActivity extends AppCompatActivity {
                     "Alarm set for " + a.getTimePretty(), Toast.LENGTH_SHORT).show();
 
         EventBus.getDefault().postSticky(new Events.AlarmAddedEvent());
+
+        isEditing = false;
+        editedAlarm = null;
 
         this.finish();
     }
@@ -352,5 +366,42 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
 
     }
+
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Events.AlarmEditEvent event) {
+        isEditing = true;
+
+        getSupportActionBar().setTitle("Edit Alarm");
+
+
+        editedAlarm = event.clickedAlarm;
+
+        String timeText = editedAlarm.getTimePretty();
+        if(editedAlarm.getHour() > 12) timeText+="PM";
+        else timeText+="AM";
+
+        currentAlarmTimeText.setText(timeText);
+        currentAlarmHour = editedAlarm.getHour();
+        currentAlarmMin = editedAlarm.getMin();
+
+        selectedRepeatType = editedAlarm.getRepeat();
+        if(selectedRepeatType == Alarm.REPEAT_NONE) repeatOptionsSpinner.setSelection(0);
+        else if(selectedRepeatType == Alarm.REPEAT_DAILY) repeatOptionsSpinner.setSelection(1);
+        else if(selectedRepeatType == Alarm.REPEAT_WEEKLY) repeatOptionsSpinner.setSelection(2);
+
+        snoozeSwitch.setChecked(editedAlarm.isSnooze());
+
+        selectedMotivationType = editedAlarm.getMot_type();
+        if(selectedMotivationType == Alarm.MOT_NONE) motivationOptionsSpinner.setSelection(0);
+        else if(selectedMotivationType == Alarm.MOT_TEXT) motivationOptionsSpinner.setSelection(1);
+        else if(selectedMotivationType == Alarm.MOT_IMG) motivationOptionsSpinner.setSelection(2);
+        else if(selectedMotivationType == Alarm.MOT_VID) motivationOptionsSpinner.setSelection(3);
+
+        motivationSelectedText.setText(editedAlarm.getMotivationData());
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
 
 }

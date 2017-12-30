@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MyAdapter adapter;
 
+    private boolean alarmClicked = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //fired when the fab is clicked
-    public void startNewAlarmActivity(View v){
+    public void startAlarmPickerActivity(View v){
         Intent i = new Intent(this,AlarmPickerActivity.class);
         startActivity(i);
     }
@@ -100,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.AlarmAddedEvent event) {
         adapter.setAlarmList(alarmStorage.getAllAlarms());
@@ -110,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
             emptyListText.setVisibility(View.INVISIBLE);
         }
 
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Events.AlarmClickEvent event){
+        EventBus.getDefault().postSticky(new Events.AlarmEditEvent(event.clickedAlarm));
+        Intent i = new Intent(this,AlarmPickerActivity.class);
+        startActivity(i);
     }
 
 
@@ -161,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             Alarm a = alarms.get(position);
-
+            final int p = position;
             String repeat = "";
             if(a.getRepeat() == Alarm.REPEAT_NONE){
                 repeat = "One Time";
@@ -183,6 +190,13 @@ public class MainActivity extends AppCompatActivity {
             holder.alarmAMPMText.setText(ampm);
             holder.alarmRepeatText.setText(repeat);
 
+            holder.containerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().postSticky(new Events.AlarmClickEvent(alarms.get(p)));
+
+                }
+            });
         }
 
         @Override

@@ -2,13 +2,14 @@ package com.example.h.alarmclock;
 
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * POJO for storing Alarm info to disk
  */
 
-public class Alarm {
+public class Alarm implements Serializable {
     //id, generated on initialisation
     private int id;
     //hour and minute
