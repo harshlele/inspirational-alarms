@@ -33,7 +33,8 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/time_text"
         android:onClick="showTimePicker"
-        android:text="Change" />
+        android:text="Change"
+        />
 
     <View
         android:id="@+id/line1"
@@ -50,18 +51,17 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/line1"
         android:textColor="#000"
-        android:text="Repeat" />
+        android:text="Repeat Everyday"
+        android:textSize="18sp"
+        />
 
-    <Spinner
-        android:id="@+id/repeat_options_spinner"
-        android:layout_width="match_parent"
+    <Switch
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/repeat_text"
-        android:entries="@array/repeat_options"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/repeat_text"
+        android:theme="@style/SwitchTheme"
+        android:id="@+id/repeat_switch"
         />
 
     <View
@@ -70,7 +70,8 @@
         android:layout_width="match_parent"
         android:background="#eee"
         android:layout_marginBottom="8dp"
-        android:layout_below="@id/repeat_options_spinner"/>
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/repeat_switch"/>
 
     <TextView
         android:id="@+id/snooze_text"
@@ -98,7 +99,7 @@
         android:layout_width="match_parent"
         android:background="#eee"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/snooze_switch"
 
         />

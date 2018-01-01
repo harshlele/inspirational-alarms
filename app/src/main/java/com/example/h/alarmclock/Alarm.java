@@ -16,10 +16,7 @@ public class Alarm implements Serializable {
     private int hour,min;
 
     //repeat type
-    private int repeat;
-    public static int REPEAT_NONE = 0;
-    public static int REPEAT_DAILY = 1;
-    public static int REPEAT_WEEKLY = 2;
+    private boolean repeat = false;
 
     //whether the snooze option is to be shown or not
     private boolean snooze = true;
@@ -74,11 +71,11 @@ public class Alarm implements Serializable {
         this.min = min;
     }
 
-    public int getRepeat() {
+    public boolean isRepeat() {
         return repeat;
     }
 
-    public void setRepeat(int repeat) {
+    public void setRepeat(boolean repeat) {
         this.repeat = repeat;
     }
 

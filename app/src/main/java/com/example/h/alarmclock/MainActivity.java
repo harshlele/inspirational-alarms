@@ -176,16 +176,7 @@ public class MainActivity extends AppCompatActivity {
             //the alarm position is sent inside an event
             final int p = position;
             //get repeat text
-            String repeat = "";
-            if(a.getRepeat() == Alarm.REPEAT_NONE){
-                repeat = "One Time";
-            }
-            else if(a.getRepeat() == Alarm.REPEAT_DAILY){
-                repeat = "Daily";
-            }
-            else if(a.getRepeat() == Alarm.REPEAT_WEEKLY){
-                repeat = "Weekly";
-            }
+            String repeat = a.isRepeat()?"Daily":"One Time";
             //get AM/PM text
             String ampm;
             ampm = "AM";

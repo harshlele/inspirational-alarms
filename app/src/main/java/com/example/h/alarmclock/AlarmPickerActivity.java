@@ -37,10 +37,9 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //boolean vars indicating whether the spinners have loaded or not
     //(onSelectedListener is also fired when the view is loaded)
     private boolean initialEventMot = false;
-    private boolean initialEventRep = false;
 
     //Spinners to select options for alarm repeat time and motivation types
-    private Spinner motivationOptionsSpinner, repeatOptionsSpinner;
+    private Spinner motivationOptionsSpinner;
 
     //Textview that shows the current set motivation text, image URI or youtube URL
     private TextView motivationSelectedText;
@@ -51,16 +50,16 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //URI of the current set ringtone of alarm
     private Uri currentRingtoneUri;
 
-    //Type of alarm repeat and motivation options.
+    //Type of motivation options.
     private int selectedMotivationType = Alarm.MOT_NONE;
-    private int selectedRepeatType = Alarm.REPEAT_NONE;
+
 
     //Current set 24-hour hour and min of alarm
     private int currentAlarmHour = 6;
     private int currentAlarmMin  = 0;
 
-    //switch to set snooze switch on or off
-    private Switch snoozeSwitch;
+    //switch to set snooze/repeat everyday on or off
+    private Switch snoozeSwitch,repeatSwitch;
 
     //indicates whether an alarm is being edited, and the actual alarm object(because alarm ids can't be changed)
     private boolean isEditing = false;
@@ -75,9 +74,9 @@ public class AlarmPickerActivity extends AppCompatActivity {
         currentAlarmTimeText = findViewById(R.id.current_time_text);
         currentAlarmRingtoneText = findViewById(R.id.current_ringtone_text);
         motivationOptionsSpinner = findViewById(R.id.motivation_options_spinner);
-        repeatOptionsSpinner = findViewById(R.id.repeat_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
         snoozeSwitch = findViewById(R.id.snooze_switch);
+        repeatSwitch = findViewById(R.id.repeat_switch);
 
         getSupportActionBar().setTitle("New Alarm");
 
@@ -113,35 +112,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
-
-
-        //listener for repeat options spinner
-        repeatOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                if(!initialEventRep){
-                    initialEventRep = true;
-                }
-
-                else {
-
-                    switch (String.valueOf(adapterView.getItemAtPosition(i))) {
-                        case "None":
-                            selectedRepeatType =Alarm.REPEAT_NONE;
-                            break;
-                        case "Daily":
-                            selectedRepeatType = Alarm.REPEAT_DAILY;
-                            break;
-                        case "Weekly":
-                            selectedRepeatType = Alarm.REPEAT_WEEKLY;
-                            break;
-                    }
-                }
-            }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
@@ -266,7 +236,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
         a.setHour(currentAlarmHour);
         a.setMin(currentAlarmMin);
-        a.setRepeat(selectedRepeatType);
+        a.setRepeat(repeatSwitch.isChecked());
         a.setSnooze(snoozeSwitch.isChecked());
         a.setMot_type(selectedMotivationType);
         a.setMotivationData(motivationSelectedText.getText().toString());
@@ -388,11 +358,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
         currentAlarmHour = editedAlarm.getHour();
         currentAlarmMin = editedAlarm.getMin();
 
-        //set the exact repeat option
-        selectedRepeatType = editedAlarm.getRepeat();
-        if(selectedRepeatType == Alarm.REPEAT_NONE) repeatOptionsSpinner.setSelection(0);
-        else if(selectedRepeatType == Alarm.REPEAT_DAILY) repeatOptionsSpinner.setSelection(1);
-        else if(selectedRepeatType == Alarm.REPEAT_WEEKLY) repeatOptionsSpinner.setSelection(2);
+        //set the repeat switch
+        repeatSwitch.setChecked(editedAlarm.isRepeat());
         //set the snooze switch
         snoozeSwitch.setChecked(editedAlarm.isSnooze());
 
