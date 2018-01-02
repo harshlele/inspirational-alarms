@@ -245,6 +245,15 @@ public class AlarmPickerActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),
                     "Alarm set for " + a.getTimePretty(), Toast.LENGTH_SHORT).show();
 
+        if(isEditing) {
+             new SimpleAlarmManager(getApplicationContext()).cancel(a.getId());
+        }
+
+        new SimpleAlarmManager(getApplicationContext())
+                .setup(-1,a.getHour(),a.getMin(),0)
+                .register(a.getId())
+                .start();
+
         EventBus.getDefault().postSticky(new Events.AlarmAddedEvent());
 
         //set isEditing back to false so it isn't considered twice

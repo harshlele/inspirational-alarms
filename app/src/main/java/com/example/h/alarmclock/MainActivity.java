@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         if(adapter.alarms.size() == 0){
             emptyListText.setVisibility(View.VISIBLE);
         }
+
     }
 
     //sticky event fired by AlarmPickerActivity when an alarm is added(ie, when the "Save" button is clicked)
@@ -195,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
                     EventBus.getDefault().postSticky(new Events.AlarmClickEvent(alarms.get(p)));
                 }
             });
+
+
+
         }
 
         @Override
