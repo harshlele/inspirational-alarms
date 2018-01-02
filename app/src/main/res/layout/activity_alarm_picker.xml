@@ -64,34 +64,6 @@
         android:id="@+id/repeat_switch"
         />
 
-    <View
-        android:id="@+id/line2"
-        android:layout_height="1dp"
-        android:layout_width="match_parent"
-        android:background="#eee"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_below="@id/repeat_switch"/>
-
-    <TextView
-        android:id="@+id/snooze_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/line2"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:text="Snooze Button" />
-
-    <Switch
-        android:id="@+id/snooze_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/line2"
-        android:theme="@style/SwitchTheme"
-        android:checked="true"
-        />
 
     <View
         android:id="@+id/line3"
@@ -100,7 +72,7 @@
         android:background="#eee"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/snooze_switch"
+        android:layout_below="@id/repeat_switch"
 
         />
 

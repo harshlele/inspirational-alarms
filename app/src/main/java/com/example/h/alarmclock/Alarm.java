@@ -18,8 +18,6 @@ public class Alarm implements Serializable {
     //repeat type
     private boolean repeat = false;
 
-    //whether the snooze option is to be shown or not
-    private boolean snooze = true;
 
     //motivation type
     private int mot_type;
@@ -77,14 +75,6 @@ public class Alarm implements Serializable {
 
     public void setRepeat(boolean repeat) {
         this.repeat = repeat;
-    }
-
-    public boolean isSnooze() {
-        return snooze;
-    }
-
-    public void setSnooze(boolean snooze) {
-        this.snooze = snooze;
     }
 
     public int getMot_type() {

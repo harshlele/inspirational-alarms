@@ -59,7 +59,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
     private int currentAlarmMin  = 0;
 
     //switch to set snooze/repeat everyday on or off
-    private Switch snoozeSwitch,repeatSwitch;
+    private Switch repeatSwitch;
 
     //indicates whether an alarm is being edited, and the actual alarm object(because alarm ids can't be changed)
     private boolean isEditing = false;
@@ -75,7 +75,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
         currentAlarmRingtoneText = findViewById(R.id.current_ringtone_text);
         motivationOptionsSpinner = findViewById(R.id.motivation_options_spinner);
         motivationSelectedText = findViewById(R.id.selected_motivation_text);
-        snoozeSwitch = findViewById(R.id.snooze_switch);
         repeatSwitch = findViewById(R.id.repeat_switch);
 
         getSupportActionBar().setTitle("New Alarm");
@@ -237,7 +236,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
         a.setHour(currentAlarmHour);
         a.setMin(currentAlarmMin);
         a.setRepeat(repeatSwitch.isChecked());
-        a.setSnooze(snoozeSwitch.isChecked());
         a.setMot_type(selectedMotivationType);
         a.setMotivationData(motivationSelectedText.getText().toString());
         a.setRingtoneUri(currentRingtoneUri);
@@ -360,8 +358,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
         //set the repeat switch
         repeatSwitch.setChecked(editedAlarm.isRepeat());
-        //set the snooze switch
-        snoozeSwitch.setChecked(editedAlarm.isSnooze());
 
         //set the motivation type
         selectedMotivationType = editedAlarm.getMot_type();
