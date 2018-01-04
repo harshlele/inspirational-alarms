@@ -17,6 +17,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         if(id != 0){
             Alarm a = new AlarmStorage(context).getAlarm(String.valueOf(id));
             Log.d("LOG!", "onReceive: " + a.getTimePretty());
+
+            if(a.isRepeat()){
+                new SimpleAlarmManager(context)
+                        .setup(-1,a.getHour(),a.getMin(),0)
+                        .register(a.getId())
+                        .start();
+            }
         }
     }
 }

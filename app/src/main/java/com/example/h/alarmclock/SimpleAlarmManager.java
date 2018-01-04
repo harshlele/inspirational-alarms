@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,8 +105,10 @@ public class SimpleAlarmManager {
     }
 
     public void cancel(int id){
+        Log.d("LOG!", "cancel: run");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,id,alarmIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         if(pendingIntent != null){
+            Log.d("LOG!", "cancel: intent not null");
             AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             manager.cancel(pendingIntent);
         }
@@ -117,23 +120,22 @@ public class SimpleAlarmManager {
 
     public SimpleAlarmManager start() {
         if( isInitWithId == Boolean.FALSE ) {
-            if( PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_NO_CREATE) == null ) {
-                pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                if( pendingIntent != null ) {
-                    AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    //manager.cancel(pendingIntent);
-                    if( interval == -1 ) {
-                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                            manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                        }
-                        else{
-                            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                        }
+            pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            if( pendingIntent != null ) {
+                AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                //manager.cancel(pendingIntent);
+                if( interval == -1 ) {
+                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                        manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                    }
+                    else{
+                        manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                     }
                 }
             }
+
         } else {
-            pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_NO_CREATE);
+            pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             if( pendingIntent != null ) {
                 AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 manager.cancel(pendingIntent);

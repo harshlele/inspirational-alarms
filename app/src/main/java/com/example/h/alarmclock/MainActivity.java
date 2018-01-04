@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         if(adapter.alarms.size() == 0){
             emptyListText.setVisibility(View.VISIBLE);
         }
-
+        new SimpleAlarmManager(getApplicationContext()).cancel(event.deletedAlarm.getId());
     }
 
     //sticky event fired by AlarmPickerActivity when an alarm is added(ie, when the "Save" button is clicked)
