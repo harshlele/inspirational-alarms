@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-/**x
+/**
  * Created by h on 1/1/18.
  * Receiver that gets the alarm
  */

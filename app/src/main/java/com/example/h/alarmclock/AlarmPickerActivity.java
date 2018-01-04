@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AlarmPickerActivity extends AppCompatActivity {
@@ -121,6 +122,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
         String defaultRingtoneTitle = RingtoneManager.getRingtone(getApplicationContext(),currentRingtoneUri).getTitle(getApplicationContext());
         currentAlarmRingtoneText.setText(defaultRingtoneTitle);
 
+        setDefaultAlarmTimeText();
+
     }
 
     //close the activity when the back button is pressed so all the view values go back to default positions
@@ -183,6 +186,19 @@ public class AlarmPickerActivity extends AppCompatActivity {
     // get the URI of default alarm ringtone
     private void getDefaultRingtone(){
         currentRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),RingtoneManager.TYPE_ALARM);
+    }
+
+    //set default alarm time to current time
+    private void setDefaultAlarmTimeText(){
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        currentAlarmHour = calendar.get(Calendar.HOUR_OF_DAY);
+        currentAlarmMin = calendar.get(Calendar.MINUTE);
+
+        String hour = String.valueOf((currentAlarmHour > 12)?(currentAlarmHour - 12):currentAlarmHour);
+        String min = (currentAlarmMin == 0)?"00":String.valueOf(currentAlarmMin);
+        String ampm = (currentAlarmHour >= 12)?"PM":"AM";
+
+        currentAlarmTimeText.setText(hour + ":" + min + ampm);
     }
 
 
