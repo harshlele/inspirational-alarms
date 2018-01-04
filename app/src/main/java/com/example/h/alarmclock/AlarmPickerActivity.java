@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -280,6 +281,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //Event generated when user sets the time for alarm
     public void setCurrentAlarmTimeText(String text){
         currentAlarmTimeText.setText(text);
+
     }
 
     private static class TimeSetEvent{
@@ -294,11 +296,15 @@ public class AlarmPickerActivity extends AppCompatActivity {
             this.m = m;
 
             //convert 24h to AM/PM.
-            if(h <= 12){
+            if(h < 12){
                 hour = String.valueOf(h);
                 ampm = "AM";
             }
-            else{
+            else if (h == 12){
+                hour = String.valueOf(h);
+                ampm = "PM";
+            }
+            else if(h > 12){
                 hour = String.valueOf(h-12);
                 ampm = "PM";
             }
@@ -319,6 +325,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
     public void onMessageEvent(TimeSetEvent event) {
         currentAlarmHour = event.h;
         currentAlarmMin = event.m;
+        Log.d("LOG!", "onMessageEvent: " + currentAlarmHour + ":" + currentAlarmMin);
         setCurrentAlarmTimeText(event.hour + ":" + event.min + event.ampm);
     }
 

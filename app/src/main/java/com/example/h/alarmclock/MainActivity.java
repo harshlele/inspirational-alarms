@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             //get AM/PM text
             String ampm;
             ampm = "AM";
-            if(a.getHour() > 12){
+            if(a.getHour() >= 12){
                 ampm = "PM";
             }
 

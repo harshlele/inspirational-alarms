@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-/**
+/**x
  * Created by h on 1/1/18.
  * Receiver that gets the alarm
  */
@@ -21,8 +21,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             if(a.isRepeat()){
                 new SimpleAlarmManager(context)
                         .setup(-1,a.getHour(),a.getMin(),0)
-                        .register(a.getId())
+                        .register(id)
                         .start();
+            }
+            else{
+                new AlarmStorage(context).deleteAlarm(id);
             }
         }
     }
