@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     static class MyViewHolder extends AbstractSwipeableItemViewHolder {
         FrameLayout containerView;
         TextView alarmDigitsText, alarmAMPMText, alarmRepeatText;
+        ImageView deleteBtn;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             alarmDigitsText = itemView.findViewById(R.id.alarm_time_digits);
             alarmAMPMText = itemView.findViewById(R.id.alarm_time_ampm);
             alarmRepeatText = itemView.findViewById(R.id.alarm_repeat);
+            deleteBtn = itemView.findViewById(R.id.delete_alarm_btn);
         }
 
         @Override
@@ -197,7 +200,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
+            holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Alarm a = alarms.get(p);
+                    alarms.remove(p);
+                    notifyItemRemoved(p);
+                    //send a message using EventBus
+                    EventBus.getDefault().post(new Events.DeleteAlarmEvent(a));
+                }
+            });
 
         }
 
