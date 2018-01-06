@@ -19,7 +19,7 @@
         android:visibility="invisible"
         android:text="¯\\_(ツ)_/¯\nNo Alarms set"
         android:textColor="@color/colorAccent"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:gravity="center"
         />
 

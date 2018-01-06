@@ -36,5 +36,13 @@ public class Events {
         }
     }
 
+    public static class AlarmFireEvent{
+        Alarm alarmToFire;
+
+        public AlarmFireEvent(Alarm alarmToFire) {
+            this.alarmToFire = alarmToFire;
+        }
+    }
+
 
 }

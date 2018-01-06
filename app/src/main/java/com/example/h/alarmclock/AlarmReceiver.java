@@ -3,7 +3,10 @@ package com.example.h.alarmclock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.PowerManager;
 import android.util.Log;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by h on 1/1/18.
@@ -15,7 +18,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         int id = intent.getIntExtra("id",0);
         if(id != 0){
-            Alarm a = new AlarmStorage(context).getAlarm(String.valueOf(id));
+            AlarmStorage alarmStorage = new AlarmStorage(context);
+            Alarm a = alarmStorage.getAlarm(String.valueOf(id));
             Log.d("LOG!", "onReceive: " + a.getTimePretty());
 
             if(a.isRepeat()){
@@ -25,8 +29,18 @@ public class AlarmReceiver extends BroadcastReceiver {
                         .start();
             }
             else{
-                new AlarmStorage(context).deleteAlarm(id);
+                alarmStorage.deleteAlarm(id);
             }
+
+            PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "ALARM_FIRE");
+            wl.acquire(1000);
+            EventBus.getDefault().postSticky(new Events.AlarmFireEvent(a));
+            Intent i = new Intent(context,AlarmActivity.class);
+            context.startActivity(i);
+            wl.release();
         }
+
+
     }
 }

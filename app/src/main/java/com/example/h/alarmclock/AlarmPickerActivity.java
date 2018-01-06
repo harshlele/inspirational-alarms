@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -195,7 +194,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
         currentAlarmMin = calendar.get(Calendar.MINUTE);
 
         String hour = String.valueOf((currentAlarmHour > 12)?(currentAlarmHour - 12):currentAlarmHour);
-        String min = (currentAlarmMin == 0)?"00":String.valueOf(currentAlarmMin);
+        String min = (currentAlarmMin < 10)?("0" + String.valueOf(currentAlarmMin)):String.valueOf(currentAlarmMin);
         String ampm = (currentAlarmHour >= 12)?"PM":"AM";
 
         currentAlarmTimeText.setText(hour + ":" + min + ampm);
@@ -341,7 +340,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
     public void onMessageEvent(TimeSetEvent event) {
         currentAlarmHour = event.h;
         currentAlarmMin = event.m;
-        Log.d("LOG!", "onMessageEvent: " + currentAlarmHour + ":" + currentAlarmMin);
         setCurrentAlarmTimeText(event.hour + ":" + event.min + event.ampm);
     }
 

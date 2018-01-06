@@ -105,10 +105,8 @@ public class SimpleAlarmManager {
     }
 
     public void cancel(int id){
-        Log.d("LOG!", "cancel: run");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,id,alarmIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         if(pendingIntent != null){
-            Log.d("LOG!", "cancel: intent not null");
             AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             manager.cancel(pendingIntent);
         }
