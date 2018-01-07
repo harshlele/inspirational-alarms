@@ -32,6 +32,7 @@ import java.util.Map;
 
 public class AlarmPickerActivity extends AppCompatActivity {
 
+
     //TextViews that show the current set time and ringtone of the alarm
     private TextView currentAlarmTimeText,currentAlarmRingtoneText;
 
@@ -79,6 +80,11 @@ public class AlarmPickerActivity extends AppCompatActivity {
         repeatSwitch = findViewById(R.id.repeat_switch);
 
         getSupportActionBar().setTitle("New Alarm");
+
+
+        //set default to "Show Text"
+        motivationOptionsSpinner.setSelection(1);
+        selectedMotivationType = Alarm.MOT_TEXT;
 
         //listener for motivation types spinner. When an item is changed, display the motivationSelectedText,
         //and do other things to get the user to select text/image/video that has to be played on dismiss

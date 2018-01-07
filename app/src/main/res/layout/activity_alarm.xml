@@ -1,22 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.h.alarmclock.AlarmActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.h.alarmclock.AlarmActivity"
+    android:background="@color/colorPrimary">
 
 
     <TextView
-        android:id="@+id/alarm_time"
-        android:layout_width="wrap_content"
+        android:id="@+id/alarmview_time"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="66dp"
-        android:textColor="@color/colorPrimary"
-        android:textSize="40sp"
-        android:text="" />
+        android:textColor="@color/colorAccent"
+        android:textSize="60sp"
+        android:text=""
+        android:gravity="center"
+        android:layout_marginBottom="32dp"
+        />
+
+
+    <TextView
+        android:id="@+id/alarmview_alarm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/alarmview_time"
+        android:layout_centerHorizontal="true"
+        android:text="Alarm"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginBottom="16dp"
+        />
+
+    <com.example.h.alarmclock.TypeWriterText
+        android:id="@+id/alarmview_motivation_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/alarmview_alarm_text"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="32sp"
+        android:text=""
+        android:gravity="center"
+        />
+
+    <Button
+        android:id="@+id/btn_dismiss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="64dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="32sp"
+        android:elevation="0dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
+        android:text="Dismiss" />
+
 
 
 </RelativeLayout>
