@@ -1,8 +1,7 @@
 package com.example.h.alarmclock;
 
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     private Button dismissBtn;
 
-    private Ringtone ringtone;
+    private MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +54,9 @@ public class AlarmActivity extends AppCompatActivity {
                 }
 
                 if(alarm.getRingtoneUri() != null){
-                    ringtone = RingtoneManager.getRingtone(getApplicationContext(),alarm.getRingtoneUri());
-                    ringtone.play();
+                    player = MediaPlayer.create(getApplicationContext(),alarm.getRingtoneUri());
+                    player.setLooping(true);
+                    player.start();
                 }
 
             }
@@ -68,8 +68,8 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                ringtone.stop();
-
+                player.stop();
+                player.release();
                 if(alarm.getMot_type() == Alarm.MOT_IMG){
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
                         Intent intent = new Intent();
@@ -83,6 +83,12 @@ public class AlarmActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
 
+                }
+                else if(alarm.getMot_type() == Alarm.MOT_VID){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(alarm.getMotivationData()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setPackage("com.google.android.youtube");
+                    startActivity(intent);
                 }
 
 
