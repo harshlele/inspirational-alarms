@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -48,6 +50,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     //Used while choosing an image from the gallery.
     private static int PICK_IMAGE_REQUEST = 6999;
+
 
     //URI of the current set ringtone of alarm
     private Uri currentRingtoneUri;
@@ -183,10 +186,33 @@ public class AlarmPickerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
-            motivationSelectedText.setText(uri.toString());
+            motivationSelectedText.setText(getImagePath(uri));
         }
 
     }
+
+    public String getImagePath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            Log.d("LOG!", "getImagePath: uri null");
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        Log.d("LOG!", "getImagePath: cursor null");
+        // this is our fallback here
+        return uri.getPath();
+    }
+
 
     // get the URI of default alarm ringtone
     private void getDefaultRingtone(){

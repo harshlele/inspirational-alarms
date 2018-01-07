@@ -28,6 +28,7 @@ public class Alarm implements Serializable {
 
     //the motivation data(text/video url/image URI)
     private String motivationData;
+
     //ringtone URI
     private Uri ringtoneUri;
 

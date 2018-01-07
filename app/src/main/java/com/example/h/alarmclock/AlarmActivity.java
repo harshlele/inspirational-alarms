@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 
 public class AlarmActivity extends AppCompatActivity {
 
@@ -74,12 +77,14 @@ public class AlarmActivity extends AppCompatActivity {
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(alarm.getMotivationData()), "image/*");
+                        intent.setDataAndType(Uri.fromFile(new File(alarm.getMotivationData())), "image/*");
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(alarm.getMotivationData()),"image/*");
+                        Uri photoUri = FileProvider.getUriForFile(AlarmActivity.this, BuildConfig.APPLICATION_ID + ".provider", new File(alarm.getMotivationData()));
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setData(photoUri);
                         startActivity(intent);
                     }
 
