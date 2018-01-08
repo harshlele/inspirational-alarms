@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -82,9 +81,8 @@ public class AlarmActivity extends AppCompatActivity {
                     } else {
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
-                        Uri photoUri = FileProvider.getUriForFile(AlarmActivity.this, BuildConfig.APPLICATION_ID + ".provider", new File(alarm.getMotivationData()));
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        intent.setData(photoUri);
+                        intent.setDataAndType(Uri.fromFile(new File(alarm.getMotivationData())),"image/*");
                         startActivity(intent);
                     }
 
