@@ -1,6 +1,7 @@
 package com.example.h.alarmclock;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,6 +29,8 @@ public class AlarmActivity extends AppCompatActivity {
 
     private MediaPlayer player;
 
+    private RelativeLayout rootLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,13 @@ public class AlarmActivity extends AppCompatActivity {
         alarmTimeText = findViewById(R.id.alarmview_time);
         motivationText = findViewById(R.id.alarmview_motivation_text);
         dismissBtn = findViewById(R.id.btn_dismiss);
+        rootLayout = findViewById(R.id.alarmview_root_layout);
+
+        AnimationDrawable animationDrawable = (AnimationDrawable) rootLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
+
 
         Events.AlarmFireEvent event = EventBus.getDefault().getStickyEvent(Events.AlarmFireEvent.class);
         if(event != null){

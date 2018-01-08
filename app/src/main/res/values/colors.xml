@@ -2,4 +2,7 @@
 <resources>
     <color name="colorPrimary">#00003e</color>
     <color name="colorAccent">#fff</color>
+    <color name="transColorEnd1">#09bc8a</color>
+    <color name="transColorEnd2">#ff9f1c</color>
+    <color name="transColorEnd3">#f15025</color>
 </resources>

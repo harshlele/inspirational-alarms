@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/alarmview_root_layout"
     tools:context="com.example.h.alarmclock.AlarmActivity"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/alarm_grad_list">
 
 
     <TextView
@@ -59,7 +59,7 @@
         android:layout_marginLeft="16dp"
         android:textSize="32sp"
         android:elevation="0dp"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/transparent"
         android:textColor="@color/colorAccent"
         android:text="Dismiss" />
 
