@@ -3,6 +3,7 @@
     package="com.example.h.alarmclock">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".App"
@@ -29,6 +30,29 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AlarmTheme" />
+
+        <receiver android:name=".OnBootReceiver"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".OnTimeChangeReceiver"
+            android:exported="false">
+            <intent-filter android:priority="2">
+                <action android:name="android.intent.action.TIME_SET"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".OnTimeZoneChangeReceiver"
+            android:exported="false">
+            <intent-filter >
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 
