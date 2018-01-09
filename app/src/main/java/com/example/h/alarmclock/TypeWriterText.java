@@ -7,6 +7,7 @@ package com.example.h.alarmclock;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
+//Custom TextView extension for typewriter animation
 
 public class TypeWriterText extends android.support.v7.widget.AppCompatTextView {
 

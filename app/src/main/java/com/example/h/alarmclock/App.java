@@ -15,6 +15,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //remove the check for content:// URIs in N and above
         if(Build.VERSION.SDK_INT>=24){
             try{
                 Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");

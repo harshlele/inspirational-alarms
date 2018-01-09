@@ -36,6 +36,7 @@ public class Events {
         }
     }
 
+    //when alarm is to be fired
     public static class AlarmFireEvent{
         Alarm alarmToFire;
 
