@@ -1,4 +1,4 @@
-package com.example.h.alarmclock;
+package com.harshallele.h.alarmclock;
 
 /**
  * Created by h on 12/30/17.

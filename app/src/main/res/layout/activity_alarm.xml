@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/alarmview_root_layout"
-    tools:context="com.example.h.alarmclock.AlarmActivity"
+    tools:context="com.harshallele.h.alarmclock.AlarmActivity"
     android:background="@drawable/alarm_grad_list">
 
 
@@ -34,7 +34,7 @@
         android:layout_marginBottom="16dp"
         />
 
-    <com.example.h.alarmclock.TypeWriterText
+    <com.harshallele.h.alarmclock.TypeWriterText
         android:id="@+id/alarmview_motivation_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

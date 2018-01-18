@@ -1,4 +1,4 @@
-package com.example.h.alarmclock;
+package com.harshallele.h.alarmclock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +11,7 @@ import java.util.Set;
  * Created by h on 1/9/18.
  */
 
-public class OnBootReceiver extends BroadcastReceiver {
+public class OnTimeChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -23,5 +23,4 @@ public class OnBootReceiver extends BroadcastReceiver {
             SimpleAlarmManager.initWithId(context, id).start();
         }
     }
-
 }

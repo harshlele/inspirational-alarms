@@ -1,4 +1,4 @@
-package com.example.h.alarmclock;
+package com.harshallele.h.alarmclock;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;

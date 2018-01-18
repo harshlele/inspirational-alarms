@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.h.alarmclock">
+    package="com.harshallele.h.alarmclock">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-        android:name=".App"
+        android:name="com.harshallele.h.alarmclock.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.harshallele.h.alarmclock.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlarmPickerActivity"  />
+        <activity android:name="com.harshallele.h.alarmclock.AlarmPickerActivity"  />
 
-        <receiver android:name=".AlarmReceiver"
+        <receiver android:name="com.harshallele.h.alarmclock.AlarmReceiver"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".AlarmActivity"
+        <activity android:name="com.harshallele.h.alarmclock.AlarmActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AlarmTheme" />
 
-        <receiver android:name=".OnBootReceiver"
+        <receiver android:name="com.harshallele.h.alarmclock.OnBootReceiver"
                   android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -39,7 +39,7 @@
         </receiver>
 
         <receiver
-            android:name=".OnTimeChangeReceiver"
+            android:name="com.harshallele.h.alarmclock.OnTimeChangeReceiver"
             android:exported="false">
             <intent-filter android:priority="2">
                 <action android:name="android.intent.action.TIME_SET"/>
@@ -47,7 +47,7 @@
         </receiver>
 
         <receiver
-            android:name=".OnTimeZoneChangeReceiver"
+            android:name="com.harshallele.h.alarmclock.OnTimeZoneChangeReceiver"
             android:exported="false">
             <intent-filter >
                 <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
