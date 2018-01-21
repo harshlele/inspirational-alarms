@@ -17,10 +17,12 @@ public class OnTimeChangeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // To get set of all registered ids on boot.
         Set<String> set = SimpleAlarmManager.getAllRegistrationIds(context);
-        for (Iterator<String> it = set.iterator(); it.hasNext(); ) {
-            int id = Integer.parseInt(it.next());
-            //to initialize with registreation id
-            SimpleAlarmManager.initWithId(context, id).start();
+        if(set != null) {
+            for (Iterator<String> it = set.iterator(); it.hasNext(); ) {
+                int id = Integer.parseInt(it.next());
+                //to initialize with registreation id
+                SimpleAlarmManager.initWithId(context, id).start();
+            }
         }
     }
 }
