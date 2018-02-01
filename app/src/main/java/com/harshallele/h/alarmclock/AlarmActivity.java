@@ -2,7 +2,9 @@ package com.harshallele.h.alarmclock;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
+import android.media.AudioAttributes;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,10 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static android.media.AudioManager.STREAM_ALARM;
 
 /*
 *Actual alarm activity
@@ -32,10 +38,12 @@ public class AlarmActivity extends AppCompatActivity {
     private Alarm alarm;
     //button to dismiss
     private Button dismissBtn;
-    //mediaplayer for playing sound
-    private MediaPlayer player;
     //root layout
     private RelativeLayout rootLayout;
+    //ringtone to play
+    private Ringtone r;
+    //indicates whether ringtone is to be kept on
+    private boolean keepPlayingRing = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +87,41 @@ public class AlarmActivity extends AppCompatActivity {
                 //start alarm ringtone
                 if(alarm.getRingtoneUri() != null){
 
-                    player = MediaPlayer.create(getApplicationContext(),alarm.getRingtoneUri());
-                    player.setLooping(true);
-                    player.start();
+                    //get alarm ringtone
+                    r = RingtoneManager.getRingtone(getApplicationContext(),alarm.getRingtoneUri());
+
+                    //set it so that the sound is played at alarm volume
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        AudioAttributes aa = new AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_ALARM)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .build();
+                        r.setAudioAttributes(aa);
+                    }
+                    else {
+                        r.setStreamType(STREAM_ALARM);
+                    }
+
+                    //start the ringtone
+                    r.play();
+
+                    //on some phones, ringtone is played only once.
+                    //So make a timer that plays it again if it has stopped.
+                    Timer mTimer = new Timer();
+                    mTimer.scheduleAtFixedRate(new TimerTask() {
+                        public void run() {
+                            if(keepPlayingRing){
+                                if(!r.isPlaying()){
+                                    r.play();
+                                }
+                            }
+                            else{
+                                r.stop();
+                                cancel();
+                            }
+                        }
+                    }, 2000, 1000);
+
 
                 }
 
@@ -95,8 +135,8 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //stop ringtone
-                player.stop();
-                player.release();
+                keepPlayingRing = false;
+
 
                 //show image
                 if(alarm.getMot_type() == Alarm.MOT_IMG){
