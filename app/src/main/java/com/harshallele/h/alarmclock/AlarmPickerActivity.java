@@ -85,9 +85,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("New Alarm");
 
 
-        //set default to "Show Text"
-        motivationOptionsSpinner.setSelection(1);
-        selectedMotivationType = Alarm.MOT_TEXT;
+        //set default to "None"
+        motivationOptionsSpinner.setSelection(0);
 
         //listener for motivation types spinner. When an item is changed, display the motivationSelectedText,
         //and do other things to get the user to select text/image/video that has to be played on dismiss
@@ -102,7 +101,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                         case "Show Text":
                             motivationSelectedText.setText("");
                             selectedMotivationType = Alarm.MOT_TEXT;
-                            getQuoteText();
+                            getQuoteText(false);
                             break;
                         case "Show a Photo":
                             motivationSelectedText.setText("");
@@ -142,17 +141,60 @@ public class AlarmPickerActivity extends AppCompatActivity {
     }
 
     //Shows a dialog with text entry to get text that has to be shown after dismiss
-    private void getQuoteText(){
-        new LovelyTextInputDialog(this,R.style.TimePickerTheme)
-                .setTitle("Show Text")
-                .setMessage("Enter the quote or message that you want to see after dismissing the alarm")
-                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                    @Override
-                    public void onTextInputConfirmed(String text) {
-                        motivationSelectedText.setText(text);
-                    }
-                })
-                .show();
+    private void getQuoteText(boolean custom){
+
+        String[] quotes = {
+                "Enter Custom Quote",
+                "Each good morning we are born again, what we do today is what matters most",
+                "Wake up and face life’s challenges head on. Else, life will become quite a challenge. Good morning.",
+                "You will not gain anything by looking back. What happened, happened. Look forward and move on.",
+                "Good morning! This day is beautiful and so are you.",
+                "This is not just another day, this is yet another chance to make your dreams come true. Good morning.",
+                "Good morning! May your coffee be hot and your eyeliner be even.",
+                "Whether you think you can or you think you can’t, you’re right.",
+                "Life is 10% what happens to me and 90% of how I react to it.",
+                "The most common way people give up their power is by thinking they don’t have any",
+                "Build your own dreams, or someone else will hire you to build theirs",
+                "Certain things catch your eye, but pursue only those that capture the heart",
+                "The only person you are destined to become is the person you decide to be",
+                "Press forward. Do not stop, do not linger in your journey, but strive for the mark set before you",
+                "Don’t watch the clock; do what it does. Keep going",
+                "Keep your eyes on the stars, and your feet on the ground"
+        };
+
+        //if variable custom is false, let the user choose from a list of options
+        if(!custom) {
+            new LovelyChoiceDialog(this, R.style.SwitchTheme)
+                    .setTitle("Select Quote")
+                    .setItems(quotes, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                        @Override
+                        public void onItemSelected(int position, String item) {
+                            if (!item.equals("Enter Custom Quote")) {
+                                motivationSelectedText.setText(item);
+                            }
+                            else {
+                                //if the user chooses "Enter Custom Quote", call this function again with custom = true
+                                getQuoteText(true);
+                            }
+                        }
+                    })
+                    .show();
+        }
+
+        else {
+            new LovelyTextInputDialog(this, R.style.TimePickerTheme)
+                    .setTitle("Enter Quote")
+                    .setMessage("Enter the quote or message that you want to see after dismissing the alarm")
+                    .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                        @Override
+                        public void onTextInputConfirmed(String text) {
+                            motivationSelectedText.setText(text);
+                        }
+
+                    })
+                    .show();
+        }
+
     }
 
     //Shows a dialog with text entry to get URL of video that has to be played.
@@ -175,9 +217,10 @@ public class AlarmPickerActivity extends AppCompatActivity {
         Intent intent = new Intent();
         // Show only images, no videos or anything else
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_PICK);
+        intent.setData(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         // Always show the chooser (if there are multiple options available)
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
 

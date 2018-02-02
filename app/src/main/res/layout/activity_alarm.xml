@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="28dp"
         android:textColor="@color/colorAccent"
         android:textSize="60sp"
         android:text=""
