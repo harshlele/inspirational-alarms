@@ -130,7 +130,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
         currentAlarmRingtoneText.setText(defaultRingtoneTitle);
 
         setDefaultAlarmTimeText();
-
     }
 
     //close the activity when the back button is pressed so all the view values go back to default positions
