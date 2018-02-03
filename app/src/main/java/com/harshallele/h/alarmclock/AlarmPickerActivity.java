@@ -106,7 +106,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                         case "Show a Photo":
                             motivationSelectedText.setText("");
                             selectedMotivationType = Alarm.MOT_IMG;
-                            getImageURI();
+                            getImageURI(false);
                             break;
                         case "Play a Youtube Video":
                             motivationSelectedText.setText("");
@@ -213,14 +213,36 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
 
     //Starts an intent to go to the image picker to choose the image.
-    private void getImageURI(){
-        Intent intent = new Intent();
-        // Show only images, no videos or anything else
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setData(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        // Always show the chooser (if there are multiple options available)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    private void getImageURI(boolean custom){
+        if(!custom){
+
+            String[] options = {"Pick Image from Gallery","Top Posts from r/GetMotivated"};
+            new LovelyChoiceDialog(this, R.style.SwitchTheme)
+                    .setTitle("Set Image")
+                    .setItems(options, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                        @Override
+                        public void onItemSelected(int position, String item) {
+                            if (item.equals("Top Posts from r/GetMotivated")) {
+                                motivationSelectedText.setText(item);
+                            }
+                            else {
+                                //if the user chooses "Enter Custom Quote", call this function again with custom = true
+                                getImageURI(true);
+                            }
+                        }
+                    })
+                    .show();
+
+        }
+        else {
+            Intent intent = new Intent();
+            // Show only images, no videos or anything else
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_PICK);
+            intent.setData(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            // Always show the chooser (if there are multiple options available)
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        }
     }
 
 
