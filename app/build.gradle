@@ -6,7 +6,7 @@ android {
         applicationId "com.com.harshallele.h.alarmclock"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 4
+        versionCode 5
         versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
