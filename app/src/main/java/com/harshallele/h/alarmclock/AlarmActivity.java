@@ -22,8 +22,6 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static android.media.AudioManager.STREAM_ALARM;
-
 /*
 *Actual alarm activity
 */
@@ -91,16 +89,12 @@ public class AlarmActivity extends AppCompatActivity {
                     r = RingtoneManager.getRingtone(getApplicationContext(),alarm.getRingtoneUri());
 
                     //set it so that the sound is played at alarm volume
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        AudioAttributes aa = new AudioAttributes.Builder()
-                                .setUsage(AudioAttributes.USAGE_ALARM)
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .build();
-                        r.setAudioAttributes(aa);
-                    }
-                    else {
-                        r.setStreamType(STREAM_ALARM);
-                    }
+                    AudioAttributes aa = new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build();
+                    r.setAudioAttributes(aa);
+
 
                     //start the ringtone
                     r.play();
@@ -140,18 +134,17 @@ public class AlarmActivity extends AppCompatActivity {
 
                 //show image
                 if(alarm.getMot_type() == Alarm.MOT_IMG){
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(new File(alarm.getMotivationData())), "image/*");
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
+
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(new File(alarm.getMotivationData())), "image/*");
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        intent.setDataAndType(Uri.fromFile(new File(alarm.getMotivationData())),"image/*");
-                        startActivity(intent);
                     }
+
+                    startActivity(intent);
+
 
                 }
                 //open yt video
