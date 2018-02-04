@@ -106,7 +106,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                         case "Show a Photo":
                             motivationSelectedText.setText("");
                             selectedMotivationType = Alarm.MOT_IMG;
-                            getImageURI(false);
+                            getImageURI(true);
                             break;
                         case "Play a Youtube Video":
                             motivationSelectedText.setText("");
@@ -204,8 +204,16 @@ public class AlarmPickerActivity extends AppCompatActivity {
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        motivationSelectedText.setText(text);
+                        if(!text.equals("")) {
+                            motivationSelectedText.setText(text);
+                        }
+                        else{
+                            selectedMotivationType = Alarm.MOT_NONE;
+                            motivationOptionsSpinner.setSelection(0);
+                            motivationSelectedText.setText("");
+                        }
                     }
+
                 })
                 .show();
     }
@@ -214,7 +222,6 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //Starts an intent to go to the image picker to choose the image.
     private void getImageURI(boolean custom){
         if(!custom){
-
             String[] options = {"Pick Image from Gallery","Top Posts from r/GetMotivated"};
             new LovelyChoiceDialog(this, R.style.SwitchTheme)
                     .setTitle("Set Image")
@@ -226,7 +233,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                             }
                             else {
                                 //if the user chooses "Enter Custom Quote", call this function again with custom = true
-                                getImageURI(true);
+                                //getImageURI(true);
                             }
                         }
                     })
@@ -252,7 +259,11 @@ public class AlarmPickerActivity extends AppCompatActivity {
             Uri uri = data.getData();
             motivationSelectedText.setText(getImagePath(uri));
         }
-
+        else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_CANCELED ){
+            selectedMotivationType = Alarm.MOT_NONE;
+            motivationOptionsSpinner.setSelection(0);
+            motivationSelectedText.setText("");
+        }
     }
 
     public String getImagePath(Uri uri) {
