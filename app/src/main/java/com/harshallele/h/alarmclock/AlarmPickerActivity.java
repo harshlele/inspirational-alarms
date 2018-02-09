@@ -324,13 +324,17 @@ public class AlarmPickerActivity extends AppCompatActivity {
         //make a hashmap with all titles as keys,and URI as values
         final Map<String, String> list = new HashMap<>();
         while (cursor.moveToNext()) {
-            String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-            String uriColumnIndex = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
-            String uriIdColumnIndex = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
 
-            String notificationUri = Uri.parse(uriColumnIndex + "/" + uriIdColumnIndex).toString();
+            try {
+                String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+                String uriColumnIndex = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
+                String uriIdColumnIndex = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
 
-            list.put(notificationTitle, notificationUri);
+                String notificationUri = Uri.parse(uriColumnIndex + "/" + uriIdColumnIndex).toString();
+
+                list.put(notificationTitle, notificationUri);
+            }
+            catch (SecurityException s){}
         }
 
         //make an array of all the keys(ie. titles) of hashmap.

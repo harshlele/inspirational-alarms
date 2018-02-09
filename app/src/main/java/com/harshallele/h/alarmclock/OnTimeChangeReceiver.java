@@ -20,7 +20,7 @@ public class OnTimeChangeReceiver extends BroadcastReceiver {
         if(set != null) {
             for (Iterator<String> it = set.iterator(); it.hasNext(); ) {
                 int id = Integer.parseInt(it.next());
-                //to initialize with registreation id
+                //to initialize with registration id
                 SimpleAlarmManager.initWithId(context, id).start();
             }
         }
