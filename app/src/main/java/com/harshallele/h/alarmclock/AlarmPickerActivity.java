@@ -158,7 +158,17 @@ public class AlarmPickerActivity extends AppCompatActivity {
                 "The only person you are destined to become is the person you decide to be",
                 "Press forward. Do not stop, do not linger in your journey, but strive for the mark set before you",
                 "Don’t watch the clock; do what it does. Keep going",
-                "Keep your eyes on the stars, and your feet on the ground"
+                "Keep your eyes on the stars, and your feet on the ground",
+                "Keep your face always toward the sunshine—and shadows will fall behind you",
+                "It is always the simple that produces the marvelous",
+                "The world is full of magical things patiently waiting for our wits to grow sharper",
+                "Let us make our future now, and let us make our dreams tomorrow’s reality",
+                "The glow of one warm thought is to me worth more than money",
+                "The best revenge is massive success",
+                "You must do the things you think you cannot do",
+                "There is nothing impossible to him who will try",
+                "Today is the only day. Yesterday is gone",
+                "Somewhere, something incredible is waiting to be known"
         };
 
         //if variable custom is false, let the user choose from a list of options

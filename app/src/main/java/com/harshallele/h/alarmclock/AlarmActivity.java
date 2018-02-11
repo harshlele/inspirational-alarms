@@ -62,7 +62,7 @@ public class AlarmActivity extends AppCompatActivity {
 
         //start background animation
         AnimationDrawable animationDrawable = (AnimationDrawable) rootLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setEnterFadeDuration(500);
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
 
