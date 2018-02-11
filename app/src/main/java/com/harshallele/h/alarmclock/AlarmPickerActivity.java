@@ -239,7 +239,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
                         @Override
                         public void onItemSelected(int position, String item) {
                             if (item.equals("Pick Image from r/GetMotivated")) {
-                                motivationSelectedText.setText(item);
+                                Intent i = new Intent(getApplicationContext(),OnlineImagePickerActivity.class);
+                                startActivityForResult(i,1234);
                             }
                             else {
                                 //if the user chooses "Pick Image from gallery", call this function again with custom = true,

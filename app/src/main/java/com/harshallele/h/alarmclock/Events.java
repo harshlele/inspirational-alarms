@@ -1,5 +1,7 @@
 package com.harshallele.h.alarmclock;
 
+import java.util.List;
+
 /**
  * Created by h on 12/30/17.
  */
@@ -42,6 +44,14 @@ public class Events {
 
         public AlarmFireEvent(Alarm alarmToFire) {
             this.alarmToFire = alarmToFire;
+        }
+    }
+
+    public static class URLLoadedEvent{
+        List<String> urls;
+
+        public URLLoadedEvent(List<String> urls) {
+            this.urls = urls;
         }
     }
 

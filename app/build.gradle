@@ -20,8 +20,7 @@ android {
 
 repositories {
     jcenter()
-    mavenCentral()
-    google()
+
 }
 
 dependencies {
@@ -39,7 +38,6 @@ dependencies {
     implementation "net.dean.jraw:JRAW:1.0.0"
     compile 'com.yarolegovich:discrete-scrollview:1.4.4'
 
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
