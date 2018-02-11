@@ -106,7 +106,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                         case "Show a Photo":
                             motivationSelectedText.setText("");
                             selectedMotivationType = Alarm.MOT_IMG;
-                            getImageURI(true);
+                            getImageURI(false);
                             break;
                         case "Play a Youtube Video":
                             motivationSelectedText.setText("");
@@ -232,18 +232,19 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //Starts an intent to go to the image picker to choose the image.
     private void getImageURI(boolean custom){
         if(!custom){
-            String[] options = {"Pick Image from Gallery","Top Posts from r/GetMotivated"};
+            String[] options = {"Pick Image from Gallery","Pick Image from r/GetMotivated"};
             new LovelyChoiceDialog(this, R.style.SwitchTheme)
                     .setTitle("Set Image")
                     .setItems(options, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
                         @Override
                         public void onItemSelected(int position, String item) {
-                            if (item.equals("Top Posts from r/GetMotivated")) {
+                            if (item.equals("Pick Image from r/GetMotivated")) {
                                 motivationSelectedText.setText(item);
                             }
                             else {
-                                //if the user chooses "Enter Custom Quote", call this function again with custom = true
-                                //getImageURI(true);
+                                //if the user chooses "Pick Image from gallery", call this function again with custom = true,
+                                //which will take the user to the gallery
+                                getImageURI(true);
                             }
                         }
                     })
