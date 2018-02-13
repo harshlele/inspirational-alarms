@@ -57,7 +57,9 @@
         </receiver>
 
         <activity android:name=".OnlineImagePickerActivity"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+                  android:theme="@style/ImagePickerTheme"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"
             />
     </application>
 

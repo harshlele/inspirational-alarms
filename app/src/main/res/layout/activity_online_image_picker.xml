@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@color/colorPrimary"
     tools:context="com.harshallele.h.alarmclock.OnlineImagePickerActivity">
 
 
@@ -14,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:text="r/GetMotivated"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="28sp"
         />
 
@@ -26,7 +27,7 @@
         android:layout_below="@id/subreddit_text"
         android:layout_alignParentStart="true"
         android:text="Swipe left/right to go to the next/previous image"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         />
 
     <com.yarolegovich.discretescrollview.DiscreteScrollView
@@ -46,8 +47,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
-        android:textColor="@color/colorAccent"
-        android:background="@color/colorPrimary"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:text="Select" />
 
 </RelativeLayout>
