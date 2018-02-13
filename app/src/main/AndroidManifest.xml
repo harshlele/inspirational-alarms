@@ -56,7 +56,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".OnlineImagePickerActivity"></activity>
+        <activity android:name=".OnlineImagePickerActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
     </application>
 
 </manifest>

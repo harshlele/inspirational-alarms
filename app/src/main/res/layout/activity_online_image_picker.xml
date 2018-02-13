@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context="com.harshallele.h.alarmclock.OnlineImagePickerActivity">
+
+
+    <TextView
+        android:id="@+id/subreddit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="r/GetMotivated"
+        android:textColor="@color/colorPrimary"
+        android:textSize="28sp"
+        />
+
+
+    <TextView
+        android:id="@+id/scroll_explain_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subreddit_text"
+        android:layout_alignParentStart="true"
+        android:text="Swipe left/right to go to the next/previous image"
+        android:textColor="@color/colorPrimary"
+        />
 
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/image_list"
+        android:layout_below="@id/scroll_explain_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_select"
+        android:layout_above="@id/btn_select"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="24dp"
-        android:layout_alignParentTop="true" />
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/btn_select"
@@ -25,6 +49,5 @@
         android:textColor="@color/colorAccent"
         android:background="@color/colorPrimary"
         android:text="Select" />
-
 
 </RelativeLayout>
