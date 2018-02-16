@@ -51,6 +51,8 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //Used while choosing an image from the gallery.
     private static int PICK_IMAGE_REQUEST = 6999;
 
+    //Used as request code for Reddit Image Picker Activity
+    private static int PICK_REDDIT_IMAGE_REQ = 12345;
 
     //URI of the current set ringtone of alarm
     private Uri currentRingtoneUri;
@@ -240,7 +242,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                         public void onItemSelected(int position, String item) {
                             if (item.equals("Pick Image from r/GetMotivated")) {
                                 Intent i = new Intent(getApplicationContext(),OnlineImagePickerActivity.class);
-                                startActivityForResult(i,1234);
+                                startActivityForResult(i,PICK_REDDIT_IMAGE_REQ);
                             }
                             else {
                                 //if the user chooses "Pick Image from gallery", call this function again with custom = true,
@@ -276,6 +278,21 @@ public class AlarmPickerActivity extends AppCompatActivity {
             motivationOptionsSpinner.setSelection(0);
             motivationSelectedText.setText("");
         }
+        else if(requestCode == PICK_REDDIT_IMAGE_REQ){
+            if (resultCode == RESULT_OK && data!= null) {
+                selectedMotivationType = Alarm.MOT_IMG;
+                String path = data.getStringExtra("result");
+                if(!path.equals("")){
+                    motivationSelectedText.setText(path);
+                }
+            }
+            else{
+                selectedMotivationType = Alarm.MOT_NONE;
+                motivationOptionsSpinner.setSelection(0);
+                motivationSelectedText.setText("");
+            }
+        }
+
     }
 
     public String getImagePath(Uri uri) {
