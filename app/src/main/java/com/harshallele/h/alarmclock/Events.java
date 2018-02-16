@@ -47,6 +47,7 @@ public class Events {
         }
     }
 
+    //for when a url has been retrieved from a post and is to be loaded into the list
     public static class URLLoadedEvent{
         List<String> urls;
 

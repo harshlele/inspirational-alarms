@@ -2,7 +2,6 @@ package com.harshallele.h.alarmclock;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -48,16 +47,24 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+/*
+* Activity that lets the user choose from a list of pictures from reddit
+* */
+
 public class OnlineImagePickerActivity extends AppCompatActivity {
 
+    //The discrete scroll view
     DiscreteScrollView scrollView;
-    List<String> urlList = new ArrayList<>();
+    //adapter
     ImageAdapter adapter;
+    //button to select images
     Button selectBtn;
+
 
     private boolean imgSelected = false;
     private String imgPath = "";
 
+    //request code for the storage permissions needed to save the image
     private static final int PERM_REQ_CODE = 682;
 
     @Override
@@ -70,11 +77,10 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.image_list);
         selectBtn = findViewById(R.id.btn_select);
 
-
+        //enable sliding of list. Also, set transitions for current item
         scrollView.setAdapter(adapter);
         scrollView.setOffscreenItems(10);
         scrollView.setSlideOnFling(true);
-
         scrollView.setItemTransformer(new ScaleTransformer.Builder()
                 .setMaxScale(1.05f)
                 .setMinScale(0.8f)
@@ -82,6 +88,7 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
                 .setPivotY(Pivot.Y.BOTTOM) // CENTER is a default one
                 .build());
 
+        //Start AsyncTask to load images from reddit
         selectBtn.setText("Loading...");
         new URLLoaderTask().execute();
 
@@ -89,6 +96,7 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //If we have storage permissions, save the image. If we don't, ask for the permissions
                 if( ContextCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
@@ -105,7 +113,7 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
 
     }
 
-
+    //if the user has granted permission, save the image
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -118,27 +126,28 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
         }
     }
 
+    //save the image using picasso
     private void saveImg(int pos){
         selectBtn.setText("Saving Image...");
         Picasso.with(getApplicationContext())
-                .load(urlList.get(pos))
+                .load(adapter.urls.get(pos))
                 .into(getTarget());
     }
 
 
-    //target to save
+    //Custom target implementation to save the image to the Downloads directory.
     private Target getTarget(){
         Target target = new Target(){
 
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                final List<String> list = new ArrayList<>();
-                final Context c = getApplicationContext();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        //generate a random image file name.
                         Random r = new Random();
                         int i1 = r.nextInt(9999 - 1001) + 1001;
+                        //save the file in the downloads directory as a JPEG file
                         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + String.valueOf(i1) + ".jpg");
                         try {
                             file.createNewFile();
@@ -150,9 +159,8 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
                             imgPath = file.getAbsolutePath();
                         } catch (IOException e) {
                             Log.e("IOException ", e.toString());
-                            Log.d("LOG!", "run: " + file.getAbsolutePath());
                         }
-
+                        //finish this activity
                         finishActivity();
                     }
                 }).start();
@@ -168,8 +176,9 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
         return target;
     }
 
+    //if the image has been selected, put the path in the returning intent
+    // (which will captured by onActivityResult of AlarmPickerActivity)
     private void finishActivity(){
-
         if(imgSelected){
             Intent returnIntent = new Intent();
             returnIntent.putExtra("result",imgPath);
@@ -184,11 +193,13 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
     }
 
 
+
+    //Asynctask to get image urls from reddit posts
     private static class URLLoaderTask extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-
+            //total no of urls extracted
             int urlCount = 0;
 
             try {
@@ -203,14 +214,18 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
                         .limit(50)
                         .build();
 
+                //get urls from a page, and send them to be added to the scroller using EventBus
+                //do that until at least 10 urls have been extracted
                 while (urlCount <= 10) {
                     List<String> newUrls = new ArrayList<>();
+                    //getMotivated.next() loads a new page
                     for (Submission s : getMotivated.next()) {
                         if (!s.isSelfPost() && s.getUrl().contains("i.imgur.com")) {
                             newUrls.add(s.getUrl());
                             urlCount++;
                         }
                     }
+                    //send the urls using EventBus
                     EventBus.getDefault().post(new Events.URLLoadedEvent(newUrls));
                 }
             }
@@ -222,9 +237,9 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
 
     }
 
+    //Fired when new urls are added
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Events.URLLoadedEvent event){
-        urlList.addAll(event.urls);
         adapter.addURLs(event.urls);
         adapter.notifyDataSetChanged();
         selectBtn.setText("Select");
@@ -243,23 +258,24 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
     }
 
 
+    //adapter for scroller
     private class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
-
+        //list of image urls
         private List<String> urls = new ArrayList<>();
 
         public ImageAdapter(List<String> urls) {
             this.urls = urls;
         }
-
+        //completely wipe and reload list
         public void setUrls(List<String> urls) {
             this.urls = urls;
         }
-
+        //add more urls to existing list
         public void addURLs(List<String> newUrls) {this.urls.addAll(newUrls); }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+            //make an imageview that has a width = 0.7 x screen width
             ImageView view = new ImageView(getApplicationContext());
             int w = (int) (Resources.getSystem().getDisplayMetrics().widthPixels * 0.7);
             view.setLayoutParams(new ViewGroup.LayoutParams(w, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -270,6 +286,7 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            //Load the image into the imageview
             Picasso.with(getApplicationContext())
                     .load(urls.get(position))
                     .placeholder(R.drawable.placeholder)

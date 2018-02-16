@@ -191,7 +191,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                     })
                     .show();
         }
-
+        // if custom is true, show a dialog that lets the user enter in their own quote.
         else {
             new LovelyTextInputDialog(this, R.style.TimePickerTheme)
                     .setTitle("Enter Quote")
@@ -233,6 +233,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
 
     //Starts an intent to go to the image picker to choose the image.
     private void getImageURI(boolean custom){
+        //Shows a dialog that lets the user choose between selecting their own image,or choosing one from reddit
         if(!custom){
             String[] options = {"Pick Image from Gallery","Pick Image from r/GetMotivated"};
             new LovelyChoiceDialog(this, R.style.SwitchTheme)
@@ -240,6 +241,7 @@ public class AlarmPickerActivity extends AppCompatActivity {
                     .setItems(options, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
                         @Override
                         public void onItemSelected(int position, String item) {
+                            //Start the activity that will let the user pick an image from reddit.
                             if (item.equals("Pick Image from r/GetMotivated")) {
                                 Intent i = new Intent(getApplicationContext(),OnlineImagePickerActivity.class);
                                 startActivityForResult(i,PICK_REDDIT_IMAGE_REQ);
@@ -260,15 +262,16 @@ public class AlarmPickerActivity extends AppCompatActivity {
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_PICK);
             intent.setData(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            // Always show the chooser (if there are multiple options available)
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         }
     }
 
-
+    //Various image request results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //For choosing an image rfom the gallery
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
             motivationSelectedText.setText(getImagePath(uri));
@@ -278,9 +281,11 @@ public class AlarmPickerActivity extends AppCompatActivity {
             motivationOptionsSpinner.setSelection(0);
             motivationSelectedText.setText("");
         }
+        //For choosing an image from reddit
         else if(requestCode == PICK_REDDIT_IMAGE_REQ){
             if (resultCode == RESULT_OK && data!= null) {
                 selectedMotivationType = Alarm.MOT_IMG;
+                //Set the image path as textview text
                 String path = data.getStringExtra("result");
                 if(!path.equals("")){
                     motivationSelectedText.setText(path);
