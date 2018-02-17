@@ -144,40 +144,11 @@ public class AlarmPickerActivity extends AppCompatActivity {
     //Shows a dialog with text entry to get text that has to be shown after dismiss
     private void getQuoteText(boolean custom){
 
-        String[] quotes = {
-                "Enter Custom Quote",
-                "Each good morning we are born again, what we do today is what matters most",
-                "Wake up and face life’s challenges head on. Else, life will become quite a challenge. Good morning.",
-                "You will not gain anything by looking back. What happened, happened. Look forward and move on.",
-                "Good morning! This day is beautiful and so are you.",
-                "This is not just another day, this is yet another chance to make your dreams come true. Good morning.",
-                "Good morning! May your coffee be hot and your eyeliner be even.",
-                "Whether you think you can or you think you can’t, you’re right.",
-                "Life is 10% what happens to me and 90% of how I react to it.",
-                "The most common way people give up their power is by thinking they don’t have any",
-                "Build your own dreams, or someone else will hire you to build theirs",
-                "Certain things catch your eye, but pursue only those that capture the heart",
-                "The only person you are destined to become is the person you decide to be",
-                "Press forward. Do not stop, do not linger in your journey, but strive for the mark set before you",
-                "Don’t watch the clock; do what it does. Keep going",
-                "Keep your eyes on the stars, and your feet on the ground",
-                "Keep your face always toward the sunshine—and shadows will fall behind you",
-                "It is always the simple that produces the marvelous",
-                "The world is full of magical things patiently waiting for our wits to grow sharper",
-                "Let us make our future now, and let us make our dreams tomorrow’s reality",
-                "The glow of one warm thought is to me worth more than money",
-                "The best revenge is massive success",
-                "You must do the things you think you cannot do",
-                "There is nothing impossible to him who will try",
-                "Today is the only day. Yesterday is gone",
-                "Somewhere, something incredible is waiting to be known"
-        };
-
         //if variable custom is false, let the user choose from a list of options
         if(!custom) {
             new LovelyChoiceDialog(this, R.style.SwitchTheme)
                     .setTitle("Select Quote")
-                    .setItems(quotes, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                    .setItems(Quotes.arr, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
                         @Override
                         public void onItemSelected(int position, String item) {
                             if (!item.equals("Enter Custom Quote")) {

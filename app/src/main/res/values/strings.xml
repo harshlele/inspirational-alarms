@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Motivational Alarm Clock</string>
+    <string name="app_name">Inspirational Alarms</string>
 
 
     <string-array name="motivation_options">
