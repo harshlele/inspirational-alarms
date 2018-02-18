@@ -216,11 +216,11 @@ public class OnlineImagePickerActivity extends AppCompatActivity {
 
                 //get urls from a page, and send them to be added to the scroller using EventBus
                 //do that until at least 10 urls have been extracted
-                while (urlCount <= 10) {
+                while (urlCount <= 20) {
                     List<String> newUrls = new ArrayList<>();
                     //getMotivated.next() loads a new page
                     for (Submission s : getMotivated.next()) {
-                        if (!s.isSelfPost() && s.getUrl().contains("i.imgur.com")) {
+                        if (!s.isSelfPost() && (s.getUrl().contains("i.imgur.com")|s.getUrl().contains("i.redd.it")) ) {
                             newUrls.add(s.getUrl());
                             urlCount++;
                         }
