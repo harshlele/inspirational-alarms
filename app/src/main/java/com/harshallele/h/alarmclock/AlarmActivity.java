@@ -1,5 +1,6 @@
 package com.harshallele.h.alarmclock;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioAttributes;
@@ -149,10 +150,13 @@ public class AlarmActivity extends AppCompatActivity {
                 }
                 //open yt video
                 else if(alarm.getMot_type() == Alarm.MOT_VID){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(alarm.getMotivationData()));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setPackage("com.google.android.youtube");
-                    startActivity(intent);
+                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(alarm.getMotivationData()));
+                    try {
+                        startActivity(appIntent);
+                    } catch (ActivityNotFoundException ex) {
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(alarm.getMotivationData()));
+                        startActivity(webIntent);
+                    }
                 }
 
                 //close activity
